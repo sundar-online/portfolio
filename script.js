@@ -90,8 +90,149 @@ async function fetchProjects() {
   }
 }
 
-// Initialize Fetch once the DOM is fully loaded
+/* ── REUSABLE NAVBAR COMPONENT ── */
+const NAVBAR_TEMPLATE = `
+<div class="nav-wrap">
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+        </svg>
+      </div>
+      <span class="logo-text">SUNDAR</span>
+    </a>
+
+    <a class="nav-item" href="index.html">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M2 6L8 2l6 4v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z" />
+        <path d="M6 14V9h4v5" />
+      </svg><span>home</span>
+    </a>
+
+    <a class="nav-item" href="index.html#work">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+        <rect x="2" y="3" width="5" height="5" rx="1" />
+        <rect x="9" y="3" width="5" height="5" rx="1" />
+        <rect x="2" y="10" width="5" height="5" rx="1" />
+        <rect x="9" y="10" width="5" height="5" rx="1" />
+      </svg><span>work</span>
+    </a>
+
+    <a class="nav-item" href="about.html">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+        <circle cx="8" cy="6" r="3" />
+        <path d="M2 14c0-3 2.5-5 6-5s6 2 6 5" />
+      </svg><span>about</span>
+    </a>
+
+    <a class="nav-item" href="blog.html">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+        <path d="M13 2H3a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V3a1 1 0 00-1-1z" />
+        <path d="M5 6h6M5 9h4" />
+      </svg><span>blog</span>
+    </a>
+
+    <div class="sep"></div>
+
+    <button id="theme-toggle" class="nav-item" style="background: none; border: none; outline: none; padding: 10px 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 999px; margin-left: 4px;" title="Toggle Theme">
+      <svg id="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px; display: none">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+      <svg id="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+    </button>
+  </nav>
+</div>
+`;
+
+function initNavbar() {
+  const target = document.getElementById('navbar-target');
+  if (!target) return;
+  target.innerHTML = NAVBAR_TEMPLATE;
+  autoActivateNav();
+  setupThemeToggle();
+}
+
+function setupThemeToggle() {
+  const themeBtn = document.getElementById('theme-toggle');
+  if (!themeBtn) return;
+
+  const sunIcon = document.getElementById('theme-icon-light');
+  const moonIcon = document.getElementById('theme-icon-dark');
+
+  // Check persistent theme
+  if (localStorage.getItem('theme') === 'light') {
+    document.documentElement.classList.add('light-mode');
+    if (sunIcon) sunIcon.style.display = 'block';
+    if (moonIcon) moonIcon.style.display = 'none';
+  }
+
+  themeBtn.addEventListener('click', () => {
+    const isLight = document.documentElement.classList.toggle('light-mode');
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    
+    if (sunIcon && moonIcon) {
+      sunIcon.style.display = isLight ? 'block' : 'none';
+      moonIcon.style.display = isLight ? 'none' : 'block';
+    }
+  });
+}
+
+/* ── NAVIGATION LOGIC ── */
+function setActive(el) {
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(item => item.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function autoActivateNav() {
+  const path = window.location.pathname;
+  const page = path.split("/").pop() || 'index.html';
+  const hash = window.location.hash || '#hero';
+  const navItems = document.querySelectorAll('.nav-item');
+  
+  navItems.forEach(item => {
+    const href = item.getAttribute('href');
+    if (!href) return;
+    
+    const hrefBase = href.split('#')[0] || 'index.html';
+    const hrefHash = href.includes('#') ? '#' + href.split('#')[1] : null;
+
+    // Direct match for simple pages (about.html, blog.html)
+    if (href === page) {
+       item.classList.add('active');
+    } 
+    // Section match for homepage (index.html)
+    else if (page === 'index.html' && hrefBase === 'index.html' && hrefHash === hash) {
+       item.classList.add('active');
+    }
+    // Default home highlight if no hash
+    else if (page === 'index.html' && href === 'index.html' && hash === '#hero') {
+       item.classList.add('active');
+    }
+    else {
+      item.classList.remove('active');
+    }
+  });
+}
+
+// Re-run on hash change for SPA feel on index.html
+window.addEventListener('hashchange', autoActivateNav);
+
+/* ── DOM READY ── */
 document.addEventListener('DOMContentLoaded', () => {
+  initNavbar();
   fetchProjects();
   fetchBlogs();
 });
