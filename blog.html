@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sundaramoorthy — blog</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --glass: rgba(255, 255, 255, 0.040);
+      --glass-b: rgba(255, 255, 255, 0.10);
+      --text: rgba(218, 232, 255, 0.90);
+      --muted: rgba(148, 185, 230, 0.55);
+      --hint: rgba(120, 160, 215, 0.35);
+      --accent: #4da6ff;
+      --accent2: #a78bfa;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    html.light-mode {
+      filter: invert(1) hue-rotate(180deg);
+    }
+    
+    html.light-mode img {
+      filter: invert(1) hue-rotate(180deg);
+    }
+
+    body {
+      background: #000000;
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.3s;
+    }
+
+    canvas#bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .nav-wrap {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      padding-top: 28px;
+      pointer-events: none;
+    }
+
+    nav {
+      pointer-events: all;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: var(--glass);
+      border: 1px solid var(--glass-b);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05), 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 60px rgba(30, 90, 200, 0.10);
+      animation: navDrop 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes navDrop {
+      from {
+        opacity: 0;
+        transform: translateY(-24px) scale(0.97)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1)
+      }
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px 6px 10px;
+      margin-right: 4px;
+      border-right: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #2f7fff, #6d28d9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(56, 130, 255, 0.35);
+      flex-shrink: 0;
+    }
+
+    .logo-icon svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .logo-text {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: 0.04em;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--muted);
+      transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+      text-decoration: none;
+    }
+
+    .nav-item svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      opacity: 0.72;
+      transition: opacity 0.2s;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.065);
+      color: var(--text);
+      box-shadow: 0 0 20px rgba(56, 130, 255, 0.12);
+    }
+
+    .nav-item.active {
+      background: rgba(56, 130, 255, 0.18);
+      color: #82c0ff;
+      box-shadow: 0 0 24px rgba(56, 130, 255, 0.22), inset 0 0 0 1px rgba(56, 130, 255, 0.22);
+    }
+
+    .sep {
+      width: 1px;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.07);
+      margin: 0 4px;
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 18px;
+      margin-left: 4px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #ddeeff;
+      background: linear-gradient(135deg, rgba(47, 127, 255, 0.38), rgba(109, 40, 217, 0.32));
+      border: 1px solid rgba(110, 170, 255, 0.28);
+      cursor: pointer;
+      transition: background 0.25s, box-shadow 0.25s, transform 0.15s;
+    }
+
+    .nav-cta:hover {
+      background: linear-gradient(135deg, rgba(47, 127, 255, 0.58), rgba(109, 40, 217, 0.50));
+      box-shadow: 0 0 32px rgba(56, 130, 255, 0.38);
+      transform: scale(1.04);
+    }
+
+    .page {
+      position: relative;
+      z-index: 10;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 130px 24px 80px;
+    }
+
+    .blog-header {
+      text-align: center;
+      margin-bottom: 52px;
+      animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .header-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: rgba(110, 185, 255, 0.75);
+      border: 1px solid rgba(80, 150, 255, 0.20);
+      padding: 5px 16px 5px 10px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+      background: rgba(20, 70, 160, 0.12);
+      backdrop-filter: blur(10px);
+    }
+
+    .header-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4da6ff;
+      box-shadow: 0 0 8px #4da6ff;
+      animation: blink 3s ease infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: 0.4
+      }
+    }
+
+    .blog-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      line-height: 1.15;
+    }
+
+    .blog-header h1 em {
+      font-style: normal;
+      background: linear-gradient(110deg, #4db8ff 10%, #a78bfa 60%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 200%;
+      animation: shimmer 5s linear infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200%
+      }
+
+      100% {
+        background-position: -200%
+      }
+    }
+
+    .blog-header p {
+      margin-top: 14px;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+    }
+
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 44px;
+      animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+    }
+
+    .filter-btn {
+      padding: 7px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.032);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: background 0.22s, color 0.22s, box-shadow 0.22s, border-color 0.22s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.065);
+      color: var(--text);
+    }
+
+    .filter-btn.active {
+      background: rgba(77, 166, 255, 0.15);
+      color: #82c0ff;
+      border-color: rgba(77, 166, 255, 0.30);
+      box-shadow: 0 0 18px rgba(77, 166, 255, 0.14);
+    }
+
+    /* featured */
+    .featured-wrap {
+      margin-bottom: 32px;
+      animation: fadeUp 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both;
+    }
+
+    .featured-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.038);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(20px);
+      transition: box-shadow 0.3s, transform 0.25s, border-color 0.3s;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 290px;
+    }
+
+    .featured-card:hover {
+      box-shadow: 0 0 60px rgba(77, 166, 255, 0.14), 0 8px 40px rgba(0, 0, 0, 0.4);
+      transform: translateY(-4px);
+      border-color: rgba(77, 166, 255, 0.20);
+    }
+
+    .featured-visual {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px 0 0 20px;
+      background: linear-gradient(135deg, #0a1830, #0d1f4a, #1a0a38);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 270px;
+    }
+
+    .fv-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(40px);
+      pointer-events: none;
+    }
+
+    .fvg1 {
+      width: 200px;
+      height: 180px;
+      background: rgba(47, 127, 255, 0.30);
+      top: -30px;
+      left: -20px;
+    }
+
+    .fvg2 {
+      width: 150px;
+      height: 130px;
+      background: rgba(109, 40, 217, 0.22);
+      bottom: -20px;
+      right: -10px;
+    }
+
+    .fv-icon {
+      position: relative;
+      z-index: 2;
+    }
+
+    .fv-icon svg {
+      width: 64px;
+      height: 64px;
+      opacity: 0.85;
+    }
+
+    .featured-label {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 3;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(130, 190, 255, 0.80);
+      background: rgba(10, 24, 55, 0.70);
+      border: 1px solid rgba(77, 130, 255, 0.22);
+      padding: 4px 12px;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+    }
+
+    .featured-body {
+      padding: 36px 36px 36px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .post-tag {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+      font-weight: 400;
+    }
+
+    .featured-body h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(18px, 2vw, 26px);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    .featured-body p {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.80;
+      flex: 1;
+    }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .post-date,
+    .post-read {
+      font-size: 12px;
+      color: var(--hint);
+      font-family: 'DM Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .post-date svg,
+    .post-read svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 18px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+      background: rgba(77, 166, 255, 0.10);
+      border: 1px solid rgba(77, 166, 255, 0.22);
+      padding: 8px 18px;
+      border-radius: 999px;
+      transition: background 0.22s, box-shadow 0.22s, transform 0.15s;
+      cursor: pointer;
+      align-self: flex-start;
+    }
+
+    .read-more:hover {
+      background: rgba(77, 166, 255, 0.20);
+      box-shadow: 0 0 22px rgba(77, 166, 255, 0.22);
+      transform: translateX(3px);
+    }
+
+    .read-more svg {
+      width: 13px;
+      height: 13px;
+      transition: transform 0.2s;
+    }
+
+    .read-more:hover svg {
+      transform: translateX(3px);
+    }
+
+    /* section label */
+    .section-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+      margin-top: 44px;
+      animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(80, 130, 220, 0.20));
+    }
+
+    .section-line.r {
+      background: linear-gradient(to left, transparent, rgba(80, 130, 220, 0.20));
+    }
+
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(110, 165, 255, 0.55);
+    }
+
+    /* grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .blog-card {
+      background: var(--glass);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: background 0.25s, box-shadow 0.25s, transform 0.22s, border-color 0.25s;
+      animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .blog-card:hover {
+      background: rgba(255, 255, 255, 0.065);
+      box-shadow: 0 0 40px rgba(77, 166, 255, 0.12), 0 8px 32px rgba(0, 0, 0, 0.35);
+      transform: translateY(-5px);
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .card-visual {
+      height: 155px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cv-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(35px);
+      pointer-events: none;
+    }
+
+    .card-visual svg.big {
+      width: 48px;
+      height: 48px;
+      position: relative;
+      z-index: 2;
+      opacity: 0.80;
+    }
+
+    .card-body {
+      padding: 22px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-tag {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-weight: 400;
+    }
+
+    .card-tag.blue {
+      color: #4da6ff
+    }
+
+    .card-tag.purple {
+      color: #a78bfa
+    }
+
+    .card-tag.teal {
+      color: #2dd4bf
+    }
+
+    .card-tag.amber {
+      color: #f59e0b
+    }
+
+    .card-tag.green {
+      color: #4ade80
+    }
+
+    .card-body h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+
+    .card-body p {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.75;
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .card-date {
+      font-size: 11px;
+      color: var(--hint);
+      font-family: 'DM Mono', monospace;
+    }
+
+    .card-arrow {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+
+    .blog-card:hover .card-arrow {
+      background: rgba(77, 166, 255, 0.15);
+      border-color: rgba(77, 166, 255, 0.28);
+      transform: translateX(3px);
+    }
+
+    .card-arrow svg {
+      width: 12px;
+      height: 12px;
+      color: var(--muted);
+    }
+
+    .blog-card:hover .card-arrow svg {
+      color: #82c0ff;
+    }
+
+    /* newsletter */
+    .newsletter {
+      margin-top: 56px;
+      padding: 36px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.032);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
+    }
+
+    .nl-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(47, 127, 255, 0.25), rgba(109, 40, 217, 0.20));
+      border: 1px solid rgba(100, 160, 255, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 18px rgba(56, 130, 255, 0.18);
+    }
+
+    .nl-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .nl-text {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .nl-text h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      margin-bottom: 5px;
+    }
+
+    .nl-text p {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .nl-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nl-input {
+      padding: 11px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 300;
+      background: rgba(255, 255, 255, 0.040);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      color: rgba(210, 230, 255, 0.88);
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      width: 210px;
+      caret-color: #4da6ff;
+      transition: border-color 0.22s, box-shadow 0.22s;
+    }
+
+    .nl-input::placeholder {
+      color: rgba(120, 160, 210, 0.32);
+    }
+
+    .nl-input:focus {
+      border-color: rgba(77, 166, 255, 0.45);
+      box-shadow: 0 0 0 3px rgba(77, 166, 255, 0.10);
+    }
+
+    .nl-btn {
+      padding: 11px 22px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: #ddeeff;
+      background: linear-gradient(135deg, rgba(47, 127, 255, 0.42), rgba(109, 40, 217, 0.36));
+      border: 1px solid rgba(100, 165, 255, 0.28);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.25s, box-shadow 0.25s, transform 0.15s;
+      white-space: nowrap;
+    }
+
+    .nl-btn:hover {
+      background: linear-gradient(135deg, rgba(47, 127, 255, 0.62), rgba(109, 40, 217, 0.56));
+      box-shadow: 0 0 28px rgba(56, 130, 255, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .nl-btn:disabled {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .nl-success {
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nl-success-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(62, 207, 142, 0.14);
+      border: 1px solid rgba(62, 207, 142, 0.26);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 14px rgba(62, 207, 142, 0.20);
+    }
+
+    .nl-success-icon svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .nl-success-text {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    /* post modal */
+    .post-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(2, 8, 20, 0.82);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px;
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .post-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .post-modal {
+      width: 100%;
+      max-width: 680px;
+      margin: 60px auto;
+      background: rgba(6, 14, 34, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      border-radius: 28px;
+      backdrop-filter: blur(32px);
+      box-shadow: 0 8px 60px rgba(0, 0, 0, 0.65), 0 0 80px rgba(30, 90, 200, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+      transform: translateY(32px) scale(0.97);
+      transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s;
+      opacity: 0;
+      overflow: hidden;
+    }
+
+    .post-overlay.open .post-modal {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .post-modal-header {
+      height: 180px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pmh-glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(50px);
+      pointer-events: none;
+    }
+
+    .pmh-icon {
+      position: relative;
+      z-index: 2;
+    }
+
+    .pmh-icon svg {
+      width: 56px;
+      height: 56px;
+      opacity: 0.85;
+    }
+
+    .pmh-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 10;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(160, 200, 235, 0.60);
+      font-size: 16px;
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+    }
+
+    .pmh-close:hover {
+      background: rgba(255, 80, 80, 0.12);
+      border-color: rgba(255, 80, 80, 0.22);
+      color: rgba(255, 140, 130, 0.85);
+      transform: rotate(90deg);
+    }
+
+    .post-modal-body {
+      padding: 36px 40px 44px;
+    }
+
+    .pm-tag {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      font-weight: 400;
+    }
+
+    .pm-tag.blue {
+      color: #4da6ff
+    }
+
+    .pm-tag.purple {
+      color: #a78bfa
+    }
+
+    .pm-tag.teal {
+      color: #2dd4bf
+    }
+
+    .pm-tag.amber {
+      color: #f59e0b
+    }
+
+    .pm-tag.green {
+      color: #4ade80
+    }
+
+    .post-modal-body h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(20px, 3vw, 28px);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+
+    .pm-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+
+    .pm-date,
+    .pm-read {
+      font-size: 12px;
+      color: var(--hint);
+      font-family: 'DM Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .pm-date svg,
+    .pm-read svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .pm-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(80, 130, 220, 0.18), transparent);
+      margin-bottom: 26px;
+    }
+
+    .pm-content {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.92;
+      color: rgba(175, 205, 240, 0.78);
+    }
+
+    .pm-content h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--text);
+      margin: 24px 0 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .pm-content p {
+      margin-bottom: 16px;
+    }
+
+    .pm-content strong {
+      font-weight: 500;
+      color: rgba(210, 228, 255, 0.88);
+    }
+
+    .pm-content code {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      background: rgba(77, 166, 255, 0.10);
+      border: 1px solid rgba(77, 166, 255, 0.18);
+      padding: 2px 8px;
+      border-radius: 6px;
+      color: #82c0ff;
+    }
+
+    .pm-content ul {
+      padding-left: 20px;
+      margin-bottom: 16px;
+    }
+
+    .pm-content ul li {
+      margin-bottom: 6px;
+    }
+
+    .pm-content .callout {
+      background: rgba(77, 166, 255, 0.08);
+      border: 1px solid rgba(77, 166, 255, 0.18);
+      border-left: 3px solid #4da6ff;
+      border-radius: 0 10px 10px 0;
+      padding: 14px 18px;
+      margin: 20px 0;
+      font-size: 13px;
+      color: rgba(160, 205, 255, 0.75);
+    }
+
+    .pm-tags-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .pm-chip {
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="bg"></canvas>
+
+  <div class="nav-wrap">
+    <nav>
+
+      <a class="nav-item" href="index.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 6L8 2l6 4v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z" />
+          <path d="M6 14V9h4v5" />
+        </svg>home</a>
+      <a class="nav-item" href="index.html#work"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"
+          stroke-linecap="round">
+          <rect x="2" y="3" width="5" height="5" rx="1" />
+          <rect x="9" y="3" width="5" height="5" rx="1" />
+          <rect x="2" y="10" width="5" height="5" rx="1" />
+          <rect x="9" y="10" width="5" height="5" rx="1" />
+        </svg>work</a>
+      <a class="nav-item" href="about.html"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"
+          stroke-linecap="round">
+          <circle cx="8" cy="6" r="3" />
+          <path d="M2 14c0-3 2.5-5 6-5s6 2 6 5" />
+        </svg>about</a>
+      <a class="nav-item active" href="#"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"
+          stroke-linecap="round">
+          <path d="M13 2H3a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V3a1 1 0 00-1-1z" />
+          <path d="M5 6h6M5 9h4" />
+        </svg>blog</a>
+        
+      <div class="sep"></div>
+      <button id="theme-toggle" class="nav-item" style="background: none; border: none; outline: none; padding: 10px 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 999px; margin-left: 4px;" title="Toggle Theme">
+        <svg id="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px; display: none;">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg id="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
+
+    </nav>
+  </div>
+
+  <div class="page">
+    <div class="blog-header">
+      <div class="header-tag">
+        <div class="header-dot"></div>thoughts &amp; learnings
+      </div>
+      <h1>my <em>blog</em></h1>
+      <p>Writing about AI, data science, full-stack dev, and everything I'm figuring out as a 3rd year CS student at
+        Saveetha.</p>
+    </div>
+
+    <!-- Featured -->
+    <div class="featured-wrap">
+      <div class="featured-card" onclick="openPost(0)">
+        <div class="featured-visual">
+          <div class="fv-glow fvg1"></div>
+          <div class="fv-glow fvg2"></div>
+          <div class="fv-icon">
+            <svg viewBox="0 0 64 64" fill="none" stroke="#4da6ff" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="8" y="14" width="48" height="36" rx="4" />
+              <path d="M22 26l-8 6 8 6M42 26l8 6-8 6M34 22l-4 20" />
+            </svg>
+          </div>
+          <div class="featured-label">featured</div>
+        </div>
+        <div class="featured-body">
+          <div class="post-tag">ai &amp; machine learning</div>
+          <h2>Building My First Neural Network from Scratch with Python</h2>
+          <p>A deep dive into how I built a feedforward neural network using only NumPy — no PyTorch, no TensorFlow.
+            What I learned changed how I think about AI forever.</p>
+          <div class="post-meta">
+            <span class="post-date"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"
+                stroke-linecap="round">
+                <rect x="1" y="2" width="10" height="9" rx="1" />
+                <path d="M4 1v2M8 1v2M1 5h10" />
+              </svg>Mar 15, 2025</span>
+            <span class="post-read"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"
+                stroke-linecap="round">
+                <circle cx="6" cy="6" r="5" />
+                <path d="M6 3v3l2 2" />
+              </svg>8 min read</span>
+          </div>
+          <div class="read-more">read article <svg viewBox="0 0 14 14" fill="none" stroke="currentColor"
+              stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 7h10M7 2l5 5-5 5" />
+            </svg></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-row">
+      <div class="section-line"></div>
+      <span class="section-label">more posts</span>
+      <div class="section-line r"></div>
+    </div>
+
+    <div class="blog-grid" id="blog-grid">
+
+      <div class="blog-card" data-cat="database" onclick="openPost(1)" style="animation-delay:0.05s">
+        <div class="card-visual" style="background:linear-gradient(135deg,#0a1830,#0d1f3a)">
+          <div class="cv-glow" style="width:120px;height:100px;background:rgba(0,117,143,0.30);top:-20px;left:-10px;">
+          </div>
+          <div class="cv-glow"
+            style="width:100px;height:80px;background:rgba(242,145,17,0.18);bottom:-10px;right:-5px;"></div>
+          <svg class="big" viewBox="0 0 48 48" fill="none" stroke="#00b4cc" stroke-width="1.4" stroke-linecap="round">
+            <ellipse cx="24" cy="12" rx="14" ry="5" />
+            <path d="M10 12v8c0 2.76 6.27 5 14 5s14-2.24 14-5v-8" />
+            <path d="M10 20v8c0 2.76 6.27 5 14 5s14-2.24 14-5v-8" />
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-tag teal">database</div>
+          <h3>MySQL vs MongoDB: Lessons from My Oracle Certification</h3>
+          <p>After earning my Oracle MySQL cert, I tested both databases on a real project and found some surprising
+            results about when to use each.</p>
+          <div class="card-footer"><span class="card-date">Mar 02, 2025</span>
+            <div class="card-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 6h8M6 2l4 4-4 4" />
+              </svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="blog-card" data-cat="mobile" onclick="openPost(2)" style="animation-delay:0.10s">
+        <div class="card-visual" style="background:linear-gradient(135deg,#060d20,#0e1535)">
+          <div class="cv-glow" style="width:130px;height:100px;background:rgba(97,218,251,0.18);top:-15px;left:20px;">
+          </div>
+          <svg class="big" viewBox="0 0 48 48" fill="none" stroke="#61dafb" stroke-width="1.4" stroke-linecap="round">
+            <ellipse cx="24" cy="24" rx="20" ry="8" />
+            <ellipse cx="24" cy="24" rx="20" ry="8" transform="rotate(60 24 24)" />
+            <ellipse cx="24" cy="24" rx="20" ry="8" transform="rotate(120 24 24)" />
+            <circle cx="24" cy="24" r="3" fill="#61dafb" stroke="none" />
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-tag blue">mobile</div>
+          <h3>Why I Chose React Native Over Flutter for My First App</h3>
+          <p>As a web dev, React Native felt like home. My honest take after shipping a real cross-platform app using
+            both frameworks.</p>
+          <div class="card-footer"><span class="card-date">Feb 18, 2025</span>
+            <div class="card-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 6h8M6 2l4 4-4 4" />
+              </svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="blog-card" data-cat="ai" onclick="openPost(3)" style="animation-delay:0.15s">
+        <div class="card-visual" style="background:linear-gradient(135deg,#0d0a28,#1a0a38)">
+          <div class="cv-glow" style="width:140px;height:110px;background:rgba(167,139,250,0.22);top:-20px;left:-10px;">
+          </div>
+          <svg class="big" viewBox="0 0 48 48" fill="none" stroke="#a78bfa" stroke-width="1.4" stroke-linecap="round">
+            <rect x="14" y="14" width="20" height="20" rx="4" />
+            <path d="M14 20H8M14 28H8M34 20h6M34 28h6M20 14V8M28 14V8M20 34v6M28 34v6" />
+            <circle cx="24" cy="24" r="3" fill="#a78bfa" stroke="none" />
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-tag purple">ai &amp; ml</div>
+          <h3>Transformers Explained: A Student's Plain-English Guide</h3>
+          <p>Attention is all you need — but what does that actually mean? Breaking it down with analogies that finally
+            made it click for me.</p>
+          <div class="card-footer"><span class="card-date">Feb 05, 2025</span>
+            <div class="card-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 6h8M6 2l4 4-4 4" />
+              </svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="blog-card" data-cat="webdev" onclick="openPost(4)" style="animation-delay:0.20s">
+        <div class="card-visual" style="background:linear-gradient(135deg,#071520,#0a1f2a)">
+          <div class="cv-glow"
+            style="width:120px;height:100px;background:rgba(6,182,212,0.22);bottom:-15px;right:-5px;"></div>
+          <svg class="big" viewBox="0 0 48 48" fill="none" stroke="#06b6d4" stroke-width="1.4" stroke-linecap="round">
+            <path
+              d="M28 14C22 14 18.4 16.4 17 21.2c1.8-2.4 3.9-3.3 6.3-2.7 1.37.342 2.348 1.336 3.43 2.434C28.481 22.78 30.354 24.8 37 24.8c6 0 9.6-2.4 11-7.2-1.8 2.4-3.9 3.3-6.3 2.7-1.37-.342-2.348-1.336-3.43-2.434C36.519 16.02 34.646 14 28 14zM17 24.8C11 24.8 7.4 27.2 6 32c1.8-2.4 3.9-3.3 6.3-2.7 1.37.342 2.348 1.336 3.43 2.434C17.481 33.58 19.354 35.6 26 35.6c6 0 9.6-2.4 11-7.2-1.8 2.4-3.9 3.3-6.3 2.7-1.37-.342-2.348-1.336-3.43-2.434C25.519 26.82 23.646 24.8 17 24.8z" />
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-tag teal">web dev</div>
+          <h3>Tailwind CSS Tips That Made My UI 10× Faster to Build</h3>
+          <p>After resisting utility-first CSS for months, I finally gave in. Here are the patterns I wish I knew from
+            day one.</p>
+          <div class="card-footer"><span class="card-date">Jan 22, 2025</span>
+            <div class="card-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 6h8M6 2l4 4-4 4" />
+              </svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="blog-card" data-cat="devlog" onclick="openPost(5)" style="animation-delay:0.25s">
+        <div class="card-visual" style="background:linear-gradient(135deg,#0a1a0a,#0d2510)">
+          <div class="cv-glow" style="width:130px;height:110px;background:rgba(74,222,128,0.16);top:-15px;right:-10px;">
+          </div>
+          <svg class="big" viewBox="0 0 48 48" fill="none" stroke="#4ade80" stroke-width="1.4" stroke-linecap="round">
+            <circle cx="24" cy="24" r="18" />
+            <path d="M24 6v4M24 38v4M6 24h4M38 24h4M24 16v8l6 4" />
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-tag green">dev log</div>
+          <h3>3rd Year Reality Check: What College Doesn't Teach You</h3>
+          <p>Real talk about the gap between university curriculum and what industry actually expects — and how I'm
+            bridging it.</p>
+          <div class="card-footer"><span class="card-date">Jan 10, 2025</span>
+            <div class="card-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 6h8M6 2l4 4-4 4" />
+              </svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="blog-card" data-cat="database" onclick="openPost(6)" style="animation-delay:0.30s">
+        <div class="card-visual" style="background:linear-gradient(135deg,#1a0e00,#291500)">
+          <div class="cv-glow" style="width:130px;height:100px;background:rgba(231,111,0,0.22);top:-10px;left:-10px;">
+          </div>
+          <svg class="big" viewBox="0 0 48 48" fill="none" stroke="#f5a623" stroke-width="1.4" stroke-linecap="round">
+            <path d="M20 6s-4 5 2 9c5 3 6 6 3 11 0 0 5-4 2-11-2.5-5-7-9-7-9z" />
+            <path d="M27 3s-3 4 1 7c4 2 5 5 2 9 0 0 4-3 1.5-9C29.5 6 27 3 27 3z" />
+            <rect x="14" y="32" width="18" height="10" rx="5" fill="#f5a623" opacity="0.9" />
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="card-tag amber">database</div>
+          <h3>60-Day Oracle Java Certification: My Study Plan &amp; Resources</h3>
+          <p>How I structured my prep to pass the Oracle Java cert while balancing final year coursework and side
+            projects.</p>
+          <div class="card-footer"><span class="card-date">Dec 28, 2024</span>
+            <div class="card-arrow"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 6h8M6 2l4 4-4 4" />
+              </svg></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+
+  <!-- POST MODAL -->
+  <div class="post-overlay" id="post-overlay" onclick="handlePOClick(event)">
+    <div class="post-modal" id="post-modal">
+      <div class="post-modal-header" id="pm-header">
+        <div class="pmh-glow" id="pmh-g1" style="width:220px;height:180px;top:-40px;left:-30px;"></div>
+        <div class="pmh-glow" id="pmh-g2" style="width:180px;height:150px;bottom:-30px;right:-20px;"></div>
+        <div class="pmh-icon" id="pm-icon"></div>
+        <button class="pmh-close" onclick="closePost()">✕</button>
+      </div>
+      <div class="post-modal-body">
+        <div class="pm-tag" id="pm-tag"></div>
+        <h2 id="pm-title"></h2>
+        <div class="pm-meta">
+          <span class="pm-date"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"
+              stroke-linecap="round">
+              <rect x="1" y="2" width="10" height="9" rx="1" />
+              <path d="M4 1v2M8 1v2M1 5h10" />
+            </svg><span id="pm-date"></span></span>
+          <span class="pm-read"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"
+              stroke-linecap="round">
+              <circle cx="6" cy="6" r="5" />
+              <path d="M6 3v3l2 2" />
+            </svg><span id="pm-read"></span></span>
+        </div>
+        <div class="pm-divider"></div>
+        <div class="pm-content" id="pm-content"></div>
+        <div class="pm-tags-row" id="pm-chips"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ── NEBULA ── */
+    const canvas = document.getElementById('bg'), ctx = canvas.getContext('2d');
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize(); window.addEventListener('resize', resize);
+    const W = () => canvas.width, H = () => canvas.height;
+    function rand(a, b) { return Math.random() * (b - a) + a; }
+
+    class Puff {
+      constructor() { this.init(); this.age = rand(0, 3000); }
+      init() { this.x = rand(-0.1, 1.1); this.y = rand(-0.1, 1.1); this.rx = rand(0.08, 0.24); this.ry = rand(0.05, 0.14); this.baseOpacity = rand(0.05, 0.16); this.vx = rand(-0.00004, 0.00004); this.vy = rand(-0.00002, 0.00002); this.rotation = rand(0, Math.PI * 2); this.rotSpeed = rand(-0.00015, 0.00015); this.hue = rand(200, 230); this.lightness = rand(50, 78); this.pulseSpeed = rand(0.0015, 0.005); this.pulseOffset = rand(0, Math.PI * 2); this.fadeSpeed = rand(0.0008, 0.002); this.fadeOffset = rand(0, Math.PI * 2); this.morphSpeed = rand(0.0006, 0.0018); this.morphOffset = rand(0, Math.PI * 2); }
+      update(t) { this.age++; this.x += this.vx; this.y += this.vy; this.rotation += this.rotSpeed; const m = 0.85 + 0.15 * Math.sin(t * this.morphSpeed + this.morphOffset); this._rx = this.rx * m; this._ry = this.ry * (1 / m); const f = 0.5 + 0.5 * Math.sin(t * this.fadeSpeed + this.fadeOffset); const p = 0.7 + 0.3 * Math.sin(t * this.pulseSpeed + this.pulseOffset); this._op = this.baseOpacity * f * p; if (this.x < -0.35 || this.x > 1.35 || this.y < -0.35 || this.y > 1.35) this.init(); }
+      draw() { const cx = this.x * W(), cy = this.y * H(), rx = this._rx * W(), ry = this._ry * H(); ctx.save(); ctx.translate(cx, cy); ctx.rotate(this.rotation); const g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx); const op = this._op; g.addColorStop(0, `hsla(${this.hue},72%,${this.lightness}%,${op})`); g.addColorStop(0.35, `hsla(${this.hue},66%,${this.lightness - 8}%,${op * 0.65})`); g.addColorStop(0.7, `hsla(${this.hue},58%,${this.lightness - 18}%,${op * 0.25})`); g.addColorStop(1, `hsla(${this.hue},50%,${this.lightness - 28}%,0)`); ctx.scale(1, ry / rx); ctx.beginPath(); ctx.arc(0, 0, rx, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill(); ctx.restore(); }
+    }
+
+    const puffs = Array.from({ length: 24 }, () => new Puff());
+    const stars = Array.from({ length: 180 }, () => { const r = Math.random(); let b = r < 0.70 ? rand(0.25, 0.8) : r < 0.90 ? rand(0.9, 1.7) : r < 0.97 ? rand(1.8, 3.0) : rand(3.2, 4.8); const big = b > 1.8; return { x: Math.random(), y: Math.random(), r: b, baseR: b, op: big ? rand(0.55, 0.95) : rand(0.15, 0.80), twinkleSpeed: rand(0.003, big ? 0.01 : 0.02), twinkleOffset: rand(0, Math.PI * 2), hue: rand(200, 225), big, shrinkRate: rand(0.00008, 0.00018), minScale: 0.02, age: rand(0, 600) }; });
+
+    function drawStars(t) { stars.forEach(s => { s.age++; const sc = Math.max(s.minScale, 1 - s.shrinkRate * s.age); s.r = s.baseR * sc; if (sc <= s.minScale) s.age = 0; const tw = 0.5 + 0.5 * Math.sin(t * s.twinkleSpeed + s.twinkleOffset); const a = s.op * (s.big ? (0.55 + 0.45 * tw) : tw); ctx.save(); ctx.globalAlpha = a; if (s.big) { const gw = ctx.createRadialGradient(s.x * W(), s.y * H(), 0, s.x * W(), s.y * H(), s.r * 5.5); gw.addColorStop(0, `hsla(${s.hue},70%,90%,0.30)`); gw.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = gw; ctx.beginPath(); ctx.arc(s.x * W(), s.y * H(), s.r * 5.5, 0, Math.PI * 2); ctx.fill(); } ctx.fillStyle = `hsl(${s.hue},55%,${s.big ? 96 : 88}%)`; ctx.beginPath(); ctx.arc(s.x * W(), s.y * H(), Math.max(0.15, s.r), 0, Math.PI * 2); ctx.fill(); ctx.restore(); }); }
+
+    function drawBase(t) { const w = W(), h = H(); ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, w, h); const sh = Math.sin(t * 0.0003) * 0.06; const g1 = ctx.createRadialGradient(w * (0.32 + sh), h * 0.50, 0, w * (0.32 + sh), h * 0.50, w * 0.65); g1.addColorStop(0, 'rgba(18,75,170,0.40)'); g1.addColorStop(0.5, 'rgba(8,35,100,0.18)'); g1.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g1; ctx.fillRect(0, 0, w, h); const g2 = ctx.createRadialGradient(w * (0.78 - sh), h * 0.40, 0, w * (0.78 - sh), h * 0.40, w * 0.48); g2.addColorStop(0, 'rgba(22,110,170,0.24)'); g2.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g2; ctx.fillRect(0, 0, w, h); const br = 0.08 + 0.06 * Math.sin(t * 0.0008); const g3 = ctx.createRadialGradient(w * 0.44, h * 0.44, 0, w * 0.44, h * 0.44, w * (0.22 + br)); g3.addColorStop(0, 'rgba(100,175,255,0.11)'); g3.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g3; ctx.fillRect(0, 0, w, h); }
+
+    let mx = 0.5, my = 0.5, smx = 0.5, smy = 0.5;
+    window.addEventListener('mousemove', e => { mx = e.clientX / window.innerWidth; my = e.clientY / window.innerHeight; });
+    function drawMouseGlow() { smx += (mx - smx) * 0.04; smy += (my - smy) * 0.04; const w = W(), h = H(), cx = smx * w, cy = smy * h; const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, w * 0.28); g.addColorStop(0, 'rgba(60,140,255,0.09)'); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); }
+
+    let t = 0; function loop() { t++; drawBase(t); puffs.forEach(p => { p.update(t); p.draw(); }); drawStars(t); drawMouseGlow(); requestAnimationFrame(loop); }
+    loop();
+
+    /* ── POST DATA ── */
+    const posts = [
+      { tag: 'ai & machine learning', tagClass: 'blue', title: 'Building My First Neural Network from Scratch with Python', date: 'Mar 15, 2025', read: '8 min read', hBg: 'linear-gradient(135deg,#061228,#0a1a40,#160836)', g1: 'rgba(47,127,255,0.35)', g2: 'rgba(109,40,217,0.25)', icon: `<svg viewBox="0 0 56 56" fill="none" stroke="#4da6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="14" width="40" height="28" rx="4"/><path d="M20 22l-8 6 8 6M36 22l8 6-8 6M30 18l-4 20"/></svg>`, chips: ['Python', 'NumPy', 'Neural Networks', 'Backpropagation', 'AI'], content: `<h3>why I built this</h3><p>After studying AI theory in class, I realized I had no idea what was <strong>actually happening inside a neural network</strong>. So I built one from scratch — no PyTorch, no TensorFlow, just NumPy and math.</p><p>This project took 3 weeks and broke my brain in the best way.</p><h3>the architecture</h3><p>I started with a simple <code>3-layer feedforward network</code> — input layer, one hidden layer with ReLU activation, and an output layer with softmax for classification.</p><div class="callout">💡 The real magic isn't in the forward pass — it's understanding how gradients flow backward through each layer during training.</div><h3>what I got wrong (and fixed)</h3><ul><li>Forgot to normalize input data — loss exploded to infinity</li><li>Used zero weight initialization — the network never learned</li><li>Learning rate too high — gradients oscillated wildly</li></ul><p>After fixing these, my network hit <strong>94% accuracy on MNIST</strong>. Not bad for pure NumPy!</p><h3>takeaway</h3><p>Building from scratch forces you to understand every detail. I now genuinely understand <em>vanishing gradients</em>, why <code>batch normalization</code> matters, and what a gradient actually is. Every AI student should try this once.</p>` },
+      { tag: 'database', tagClass: 'teal', title: 'MySQL vs MongoDB: Lessons from My Oracle Certification', date: 'Mar 02, 2025', read: '6 min read', hBg: 'linear-gradient(135deg,#041520,#061e2a,#051018)', g1: 'rgba(0,117,143,0.35)', g2: 'rgba(242,145,17,0.22)', icon: `<svg viewBox="0 0 56 56" fill="none" stroke="#00b4cc" stroke-width="1.5" stroke-linecap="round"><ellipse cx="28" cy="16" rx="16" ry="6"/><path d="M12 16v8c0 3.31 7.16 6 16 6s16-2.69 16-6v-8"/><path d="M12 24v8c0 3.31 7.16 6 16 6s16-2.69 16-6v-8"/></svg>`, chips: ['MySQL', 'MongoDB', 'Oracle', 'SQL', 'Database Design'], content: `<h3>the context</h3><p>After completing my <strong>Oracle MySQL certification</strong>, I built two versions of the same student record system — one in MySQL, one in MongoDB. Here's what I found.</p><h3>where MySQL won</h3><ul><li>Complex JOIN queries across multiple tables were clean and fast</li><li>ACID transactions gave me peace of mind for financial-style data</li><li>Schema enforcement caught bugs I didn't even know I had</li></ul><h3>where MongoDB surprised me</h3><ul><li>Prototyping was dramatically faster — no schema migrations</li><li>Nested document structure felt natural for hierarchical data</li><li>Horizontal scaling story is genuinely better for massive datasets</li></ul><div class="callout">📌 Use MySQL when your data has clear relationships and consistency matters. Use MongoDB when your schema is evolving fast or your data is document-shaped.</div><h3>the certification was worth it</h3><p>The Oracle curriculum forced me to understand <code>query optimization</code>, <code>indexing strategies</code>, and <code>stored procedures</code> at a deep level. 10/10 would recommend.</p>` },
+      { tag: 'mobile', tagClass: 'blue', title: 'Why I Chose React Native Over Flutter for My First App', date: 'Feb 18, 2025', read: '5 min read', hBg: 'linear-gradient(135deg,#040d20,#081535,#040818)', g1: 'rgba(97,218,251,0.25)', g2: 'rgba(56,130,255,0.20)', icon: `<svg viewBox="0 0 56 56" fill="none" stroke="#61dafb" stroke-width="1.5" stroke-linecap="round"><ellipse cx="28" cy="28" rx="22" ry="9"/><ellipse cx="28" cy="28" rx="22" ry="9" transform="rotate(60 28 28)"/><ellipse cx="28" cy="28" rx="22" ry="9" transform="rotate(120 28 28)"/><circle cx="28" cy="28" r="4" fill="#61dafb" stroke="none"/></svg>`, chips: ['React Native', 'Flutter', 'Mobile', 'JavaScript', 'Expo'], content: `<h3>the backstory</h3><p>I needed a mobile app for my semester project. As someone with a JavaScript background, I had to choose between <strong>React Native</strong> and <strong>Flutter</strong>.</p><h3>why React Native made sense for me</h3><ul><li>I already knew React — the mental model transferred perfectly</li><li>JavaScript ecosystem meant I could reuse npm packages</li><li>Hot reload was fast, debugging felt familiar</li><li>Expo made initial setup completely painless</li></ul><h3>what Flutter does better</h3><ul><li>Performance is smoother on animation-heavy UIs</li><li>Dart is a nicer language than people admit</li><li>Widget system is more consistent across iOS and Android</li></ul><div class="callout">⚡ If you're already a React developer, React Native is the pragmatic choice. Starting fresh? Flutter's performance might win you over.</div><p>My app shipped in <strong>3 weeks</strong> using React Native and my professor was genuinely impressed. Mission accomplished.</p>` },
+      { tag: 'ai & ml', tagClass: 'purple', title: "Transformers Explained: A Student's Plain-English Guide", date: 'Feb 05, 2025', read: '10 min read', hBg: 'linear-gradient(135deg,#0d0a28,#180a38,#0a0820)', g1: 'rgba(167,139,250,0.30)', g2: 'rgba(109,40,217,0.25)', icon: `<svg viewBox="0 0 56 56" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round"><rect x="18" y="18" width="20" height="20" rx="4"/><path d="M18 26H10M18 34H10M38 26h8M38 34h8M26 18V10M34 18V10M26 38v8M34 38v8"/><circle cx="28" cy="28" r="4" fill="#a78bfa" stroke="none"/></svg>`, chips: ['Transformers', 'Attention', 'NLP', 'Deep Learning', 'AI'], content: `<h3>why another transformer explanation?</h3><p>Every article I found was either too mathematical or too hand-wavy. I wrote this after it finally clicked for me, hoping it helps other students.</p><h3>the core idea in one sentence</h3><p><strong>Transformers learn which parts of the input to pay attention to when producing each part of the output.</strong></p><h3>the attention mechanism (simply)</h3><p>Imagine translating "The cat sat on the mat because it was tired." When deciding what "it" refers to, you look back at "cat" — not "mat". Attention lets the model figure this out automatically.</p><div class="callout">🧠 Think of attention like a spotlight. For each word you process, the model shines spotlights of different brightness on all other words to gather context.</div><h3>why "attention is all you need"</h3><ul><li>No recurrence means training can be massively parallelized</li><li>Long-range dependencies are handled directly</li><li>The architecture scales: bigger model + more data = better results</li></ul><p>Positional encoding still confuses me a bit — if you have a great intuition for it, reach out. I'd love to discuss it!</p>` },
+      { tag: 'web dev', tagClass: 'teal', title: 'Tailwind CSS Tips That Made My UI 10× Faster to Build', date: 'Jan 22, 2025', read: '4 min read', hBg: 'linear-gradient(135deg,#041520,#071e28,#030f18)', g1: 'rgba(6,182,212,0.28)', g2: 'rgba(20,160,180,0.20)', icon: `<svg viewBox="0 0 56 56" fill="none" stroke="#06b6d4" stroke-width="1.5" stroke-linecap="round"><path d="M28 14C22 14 18.4 16.4 17 21.2c1.8-2.4 3.9-3.3 6.3-2.7 1.37.342 2.35 1.336 3.43 2.434C28.48 22.78 30.35 24.8 37 24.8c6 0 9.6-2.4 11-7.2-1.8 2.4-3.9 3.3-6.3 2.7-1.37-.342-2.35-1.336-3.43-2.434C36.52 16.02 34.65 14 28 14zM17 24.8C11 24.8 7.4 27.2 6 32c1.8-2.4 3.9-3.3 6.3-2.7 1.37.342 2.35 1.336 3.43 2.434C17.48 33.58 19.35 35.6 26 35.6c6 0 9.6-2.4 11-7.2-1.8 2.4-3.9 3.3-6.3 2.7-1.37-.342-2.35-1.336-3.43-2.434C25.52 26.82 23.65 24.8 17 24.8z"/></svg>`, chips: ['Tailwind CSS', 'Frontend', 'CSS', 'UI Design', 'Productivity'], content: `<h3>I was a Tailwind skeptic</h3><p>For months I thought utility-first CSS was just messy HTML. Then a friend showed me a component he built in 20 minutes that would have taken me 2 hours with vanilla CSS. I converted immediately.</p><h3>tip 1: embrace the component pattern</h3><p>Stop worrying about "too many classes." Extract reusable patterns using <code>@apply</code> or component files. <strong>Your styles live with your markup — that's a feature, not a bug.</strong></p><h3>tip 2: use the config as a design system</h3><p>Define your colors, fonts, and spacing in <code>tailwind.config.js</code> once. Every class you write is automatically on-brand. No more random hex codes scattered everywhere.</p><h3>tip 3: dark mode is one word away</h3><p>Adding the <code>dark:</code> prefix to any utility makes dark mode trivial. Combined with <code>prefers-color-scheme</code>, your site respects user preferences out of the box.</p><div class="callout">🚀 My workflow: Tailwind for layout and spacing, custom CSS only for complex animations. Build speed improved dramatically.</div>` },
+      { tag: 'dev log', tagClass: 'green', title: "3rd Year Reality Check: What College Doesn't Teach You", date: 'Jan 10, 2025', read: '7 min read', hBg: 'linear-gradient(135deg,#071507,#0a1f0c,#050f06)', g1: 'rgba(74,222,128,0.22)', g2: 'rgba(20,180,80,0.18)', icon: `<svg viewBox="0 0 56 56" fill="none" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"><circle cx="28" cy="28" r="20"/><path d="M28 8v6M28 42v6M8 28h6M42 28h6M28 18v10l7 5"/></svg>`, chips: ['Student Life', 'Career', 'Git', 'Real World', 'Soft Skills'], content: `<h3>the gap is real</h3><p>Nobody told me knowing data structures isn't enough. After 2.5 years at Saveetha Engineering, here's what I had to teach myself.</p><h3>thing 1: Git is not optional</h3><p>I wrote 6 months of code before a senior student asked if I was using Git. I wasn't. I had a folder called <code>project_final_FINAL_v3</code>. Don't be me. Learn Git on day one.</p><h3>thing 2: reading code beats writing code</h3><p>In college you write code. In the real world, you <strong>read and modify existing code 80% of the time</strong>. I started reading open source projects specifically to practice this.</p><h3>thing 3: communication matters as much as code</h3><p>I've seen brilliant engineers who couldn't explain their solution in a PR review. Writing clear commit messages and explaining trade-offs are skills you must actively build.</p><div class="callout">📚 What actually helped: open source contributions, real projects with deadlines, and finding a community of students learning together.</div><ul><li>One open-source contribution per month</li><li>Weekly blog posts (like this one!)</li><li>Daily LeetCode during internship season</li><li>Building projects that solve real problems I have</li></ul>` },
+      { tag: 'database', tagClass: 'amber', title: '60-Day Oracle Java Certification: My Study Plan & Resources', date: 'Dec 28, 2024', read: '6 min read', hBg: 'linear-gradient(135deg,#1a0e00,#261400,#110900)', g1: 'rgba(231,111,0,0.30)', g2: 'rgba(245,166,35,0.20)', icon: `<svg viewBox="0 0 56 56" fill="none" stroke="#f5a623" stroke-width="1.5" stroke-linecap="round"><path d="M22 8s-4 5 2 9c5 3 6 6 3 11 0 0 5-4 2-11-2.5-5-7-9-7-9z"/><path d="M31 5s-3 4 1 7c4 2 5 5 2 9 0 0 4-3 1.5-9C33.5 8 31 5 31 5z"/><rect x="16" y="34" width="22" height="12" rx="6" fill="#f5a623" opacity="0.9"/></svg>`, chips: ['Oracle', 'Java', 'Certification', 'Study Plan', 'Career'], content: `<h3>why I pursued it</h3><p>I wanted proof of my Java skills beyond "I learned it in class." The Oracle certification is globally recognized and forces you to understand the language at a deep level.</p><h3>my 60-day study plan</h3><p><strong>Days 1–20:</strong> Core Java review. Used "OCA Java SE 8 Programmer" by Jeanne Boyarsky. Focused on data types, operators, flow control, and arrays.</p><p><strong>Days 21–40:</strong> OOP deep dive. Inheritance, interfaces, abstract classes, and polymorphism. Java's type system is more nuanced than I expected.</p><p><strong>Days 41–55:</strong> Practice exams. Enthuware mock tests are harder than the real exam — the best investment.</p><p><strong>Days 56–60:</strong> Review weak areas and rest. Don't cram the night before.</p><div class="callout">📋 Key resources: "OCA Java SE 8" book, Enthuware mock tests, Java Brains on YouTube, and Codecademy for quick syntax refreshers.</div><h3>exam tips</h3><ul><li>Read every question twice — tricky wording is intentional</li><li>Eliminate obviously wrong answers first</li><li>Trace code on paper for complex questions</li><li>Budget ~1.5 minutes per question</li></ul><p>The cert opened internship conversations I wouldn't have had otherwise. Absolutely worth it.</p>` }
+    ];
+
+    function openPost(idx) {
+      const p = posts[idx];
+      document.getElementById('pm-header').style.background = p.hBg;
+      document.getElementById('pmh-g1').style.background = p.g1;
+      document.getElementById('pmh-g2').style.background = p.g2;
+      document.getElementById('pm-icon').innerHTML = p.icon;
+      const tg = document.getElementById('pm-tag'); tg.className = 'pm-tag ' + p.tagClass; tg.textContent = p.tag;
+      document.getElementById('pm-title').textContent = p.title;
+      document.getElementById('pm-date').textContent = p.date;
+      document.getElementById('pm-read').textContent = p.read;
+      document.getElementById('pm-content').innerHTML = p.content;
+      document.getElementById('pm-chips').innerHTML = p.chips.map(c => `<span class="pm-chip">${c}</span>`).join('');
+      document.getElementById('post-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closePost() { document.getElementById('post-overlay').classList.remove('open'); document.body.style.overflow = ''; }
+    function handlePOClick(e) { if (e.target === document.getElementById('post-overlay')) closePost(); }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePost(); });
+
+    function filterPosts(cat, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.blog-card').forEach(c => { c.style.display = cat === 'all' || c.dataset.cat === cat ? 'flex' : 'none'; });
+    }
+
+    function subscribeNL() {
+      const inp = document.getElementById('nl-email');
+      const val = inp.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+        inp.style.borderColor = 'rgba(255,80,80,0.45)';
+        inp.style.boxShadow = '0 0 0 3px rgba(255,80,80,0.10)';
+        inp.focus(); return;
+      }
+      inp.style.borderColor = ''; inp.style.boxShadow = '';
+      const btn = document.getElementById('nl-btn');
+      const btnText = document.getElementById('nl-btn-text');
+      const spinner = document.getElementById('nl-spinner');
+      btn.disabled = true; btnText.style.display = 'none'; spinner.style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('nl-form-wrap').style.display = 'none';
+        const suc = document.getElementById('nl-success');
+        suc.style.display = 'flex';
+        document.getElementById('nl-confirmed-email').textContent = val;
+        suc.style.opacity = '0'; suc.style.transform = 'translateY(6px)'; suc.style.transition = 'opacity 0.4s,transform 0.4s';
+        requestAnimationFrame(() => requestAnimationFrame(() => { suc.style.opacity = '1'; suc.style.transform = 'translateY(0)'; }));
+      }, 1200);
+    }
+    
+    /* ── THEME TOGGLE ── */
+    const themeBtn = document.getElementById('theme-toggle');
+    const iconLight = document.getElementById('theme-icon-light');
+    const iconDark = document.getElementById('theme-icon-dark');
+    
+    // Check saved theme
+    if (localStorage.getItem('theme') === 'light') {
+      document.documentElement.classList.add('light-mode');
+      iconLight.style.display = 'none';
+      iconDark.style.display = 'block';
+    } else {
+      iconLight.style.display = 'block';
+      iconDark.style.display = 'none';
+    }
+
+    themeBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('light-mode');
+      if (document.documentElement.classList.contains('light-mode')) {
+        localStorage.setItem('theme', 'light');
+        iconLight.style.display = 'none';
+        iconDark.style.display = 'block';
+      } else {
+        localStorage.setItem('theme', 'dark');
+        iconLight.style.display = 'block';
+        iconDark.style.display = 'none';
+      }
+    });    
+  </script>
+</body>
+
+</html>
