@@ -1,11 +1,7 @@
 /* ── FETCH PROJECTS ── */
 async function fetchProjects() {
   const container = document.getElementById('projects-container');
-  
-  if (!container) {
-    console.error('Error: projects-container not found in HTML.');
-    return;
-  }
+  if (!container) return;
 
   // Detect if running from local file system (CORS restriction)
   if (window.location.protocol === 'file:') {
@@ -14,9 +10,15 @@ async function fetchProjects() {
   }
 
   try {
-    console.log('Fetching projects from data/projects.json...');
-    const response = await fetch('data/projects.json');
+    // Attempt Vite-standard root path first
+    let response = await fetch('/data/projects.json');
     
+    // Fallback for standard servers (e.g. Live Server) where public is not root
+    if (!response.ok && response.status === 404) {
+      console.warn('Vite root path /data/ not found. Falling back to public/data/ path...');
+      response = await fetch('public/data/projects.json');
+    }
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -24,37 +26,65 @@ async function fetchProjects() {
     const projects = await response.json();
     console.log('Successfully loaded projects:', projects.length);
     
-    container.innerHTML = projects.map(p => `
-      <div class="project-card">
-        <div class="project-image">
-          <img src="${p.image}" alt="${p.title}" loading="lazy">
-        </div>
-        <div class="project-content">
-          <h3 class="project-title">${p.title}</h3>
-          <p class="project-desc">${p.description}</p>
-          <div class="project-footer">
+    container.innerHTML = projects.map(p => {
+      // Ensure image path is also resilient
+      // If it starts with /data, we try both /data and public/data
+      const imgPath = p.image.startsWith('/') ? p.image : `/data/${p.image}`;
+      
+      return `
+        <div class="project-card">
+          <div class="project-image">
+            <img src="${imgPath}" alt="${p.title}" loading="lazy" onerror="this.onerror=null; this.src='public${p.image}'">
+          </div>
+          <div class="project-content">
+            <h3 class="project-title">${p.title}</h3>
+            <p class="project-desc">${p.description}</p>
+            
+            ${p.metrics ? `
+              <div class="project-metrics">
+                ${Object.entries(p.metrics).map(([key, val]) => `
+                  <div class="metric-item">
+                    <div class="metric-label">${key}</div>
+                    <div class="metric-value">${val}</div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+
             <div class="project-tags">
               ${p.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
             </div>
-            <a href="${p.link}" class="project-link">
-              View Site
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </a>
+
+            <div class="project-actions">
+              <a href="${p.link}" class="btn-project btn-demo" target="_blank">
+                Live Demo
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </a>
+              <a href="${p.github_link || '#'}" class="btn-project btn-code" target="_blank">
+                Code
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                </svg>
+              </a>
+              <a href="${p.details_link || '#'}" class="btn-project btn-details">
+                Details
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   } catch (error) {
     console.error('Error fetching projects:', error);
     container.innerHTML = `
-      <div style="padding: 40px; text-align: center; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px dashed rgba(255,255,255,0.1);">
-        <p style="color: rgba(220, 235, 255, 0.6); margin-bottom: 8px;">Unable to load projects dynamically.</p>
-        <p style="font-size: 12px; color: rgba(220, 235, 255, 0.3);">Reason: ${error.message}</p>
-        ${window.location.protocol === 'file:' ? 
-          '<p style="font-size: 11px; color: #ff6b6b; margin-top: 12px;">⚠️ Browser blocked fetch from local file (CORS). Please use a web server.</p>' : ''}
+      <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: rgba(255, 255, 255, 0.45);">
+        <p style="font-size: 14px; margin-bottom: 16px;">Unable to load projects at this time.</p>
+        <button onclick="location.reload()" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 8px 20px; border-radius: 999px; cursor: pointer; font-size: 12px; transition: 0.2s;">
+          Retry Connection
+        </button>
       </div>
     `;
   }
@@ -72,7 +102,10 @@ async function fetchBlogs() {
   if (!container) return;
 
   try {
-    const response = await fetch('data/blogs.json');
+    let response = await fetch('/data/blogs.json');
+    if (!response.ok && response.status === 404) {
+      response = await fetch('public/data/blogs.json');
+    }
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     
     const blogs = await response.json();
@@ -97,7 +130,7 @@ async function fetchBlogs() {
             <p>${displayContent}</p>
             <div class="d-post-tags">
               ${blog.tags.map(tag => `<span class="d-post-tag">${tag}</span>`).join('')}
-              <span class="d-post-tag" style="background: rgba(255,255,255,0.05); color: #4da6ff; border: none; padding-left: 0;">Read More →</span>
+              <span class="d-post-tag" style="background: rgba(255,255,255,0.05); color: #ffffff; border: none; padding-left: 0;">Read More →</span>
             </div>
           </div>
         </a>
@@ -111,20 +144,20 @@ async function fetchBlogs() {
 
 function getBlogGradient(type) {
   const gradients = {
-    code: 'linear-gradient(135deg,#0a1830,#0d1f3a)',
-    dream: 'linear-gradient(135deg,#1f1c2c,#928dab)',
-    neural: 'linear-gradient(135deg,#232526,#414345)'
+    code: 'linear-gradient(135deg,rgba(96,165,250,0.1),rgba(96,165,250,0.02))',
+    dream: 'linear-gradient(135deg,rgba(167,139,250,0.1),rgba(167,139,250,0.02))',
+    neural: 'linear-gradient(135deg,rgba(45,212,191,0.1),rgba(45,212,191,0.02))'
   };
   return gradients[type] || gradients.code;
 }
 
 function getBlogIcon(type) {
   const icons = {
-    code: `<svg viewBox="0 0 64 64" fill="none" stroke="#4da6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:40px; opacity:0.8;">
+    code: `<svg viewBox="0 0 64 64" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:40px; opacity:0.8;">
             <rect x="8" y="14" width="48" height="36" rx="4" />
             <path d="M22 26l-8 6 8 6M42 26l8 6-8 6M34 22l-4 20" />
           </svg>`,
-    dream: `<svg viewBox="0 0 48 48" fill="none" stroke="#eebb00" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:32px; opacity:0.8;">
+    dream: `<svg viewBox="0 0 48 48" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:32px; opacity:0.8;">
             <circle cx="24" cy="24" r="16" />
             <path d="M24 14v10l6 6" />
           </svg>`,
@@ -155,7 +188,7 @@ class Puff {
     this.baseOpacity = rand(0.06, 0.18);
     this.vx = rand(-0.00004, 0.00004); this.vy = rand(-0.00002, 0.00002);
     this.rotation = rand(0, Math.PI * 2); this.rotSpeed = rand(-0.00015, 0.00015);
-    this.hue = rand(200, 230); this.lightness = rand(50, 78);
+    this.hue = 0; this.lightness = rand(20, 40);
     this.pulseSpeed = rand(0.0015, 0.005); this.pulseOffset = rand(0, Math.PI * 2);
     this.fadeSpeed = rand(0.0008, 0.002); this.fadeOffset = rand(0, Math.PI * 2);
     this.morphSpeed = rand(0.0006, 0.0018); this.morphOffset = rand(0, Math.PI * 2);
@@ -176,10 +209,10 @@ class Puff {
     ctx.save(); ctx.translate(cx, cy); ctx.rotate(this.rotation);
     const g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
     const op = this._opacity;
-    g.addColorStop(0, `hsla(${this.hue},72%,${this.lightness}%,${op})`);
-    g.addColorStop(0.35, `hsla(${this.hue},66%,${this.lightness - 8}%,${op * 0.65})`);
-    g.addColorStop(0.7, `hsla(${this.hue},58%,${this.lightness - 18}%,${op * 0.25})`);
-    g.addColorStop(1, `hsla(${this.hue},50%,${this.lightness - 28}%,0)`);
+    g.addColorStop(0, `hsla(0,0%,${this.lightness}%,${op})`);
+    g.addColorStop(0.35, `hsla(0,0%,${this.lightness - 4}%,${op * 0.65})`);
+    g.addColorStop(0.7, `hsla(0,0%,${this.lightness - 8}%,${op * 0.25})`);
+    g.addColorStop(1, `hsla(0,0%,${this.lightness - 12}%,0)`);
     ctx.scale(1, ry / rx); ctx.beginPath(); ctx.arc(0, 0, rx, 0, Math.PI * 2);
     ctx.fillStyle = g; ctx.fill(); ctx.restore();
   }
@@ -194,7 +227,7 @@ const stars = Array.from({ length: 200 }, () => {
   return {
     x: Math.random(), y: Math.random(), r: baseR, baseR, op: isBig ? rand(0.55, 0.95) : rand(0.15, 0.80),
     twinkleSpeed: rand(0.003, isBig ? 0.01 : 0.02), twinkleOffset: rand(0, Math.PI * 2),
-    hue: rand(200, 225), isBig, shrinkRate: rand(0.00008, 0.00018), minScale: 0.02, age: rand(0, 600)
+    hue: 0, isBig, shrinkRate: rand(0.00008, 0.00018), minScale: 0.02, age: rand(0, 600)
   };
 });
 
@@ -209,10 +242,10 @@ function drawStars(t) {
     ctx.save(); ctx.globalAlpha = alpha;
     if (s.isBig) {
       const glow = ctx.createRadialGradient(s.x * W(), s.y * H(), 0, s.x * W(), s.y * H(), s.r * 5.5);
-      glow.addColorStop(0, `hsla(${s.hue},70%,90%,0.32)`); glow.addColorStop(1, 'rgba(0,0,0,0)');
+      glow.addColorStop(0, `hsla(0,0%,90%,0.32)`); glow.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(s.x * W(), s.y * H(), s.r * 5.5, 0, Math.PI * 2); ctx.fill();
     }
-    ctx.fillStyle = `hsl(${s.hue},55%,${s.isBig ? 96 : 88}%)`;
+    ctx.fillStyle = `hsla(0, 0%, 100%, 0.8)`;
     ctx.beginPath(); ctx.arc(s.x * W(), s.y * H(), Math.max(0.15, s.r), 0, Math.PI * 2); ctx.fill();
     ctx.restore();
   });
@@ -223,17 +256,17 @@ function drawBase(t) {
   ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, w, h);
   const shift = Math.sin(t * 0.0003) * 0.06;
   const g1 = ctx.createRadialGradient(w * (0.32 + shift), h * 0.50, 0, w * (0.32 + shift), h * 0.50, w * 0.65);
-  g1.addColorStop(0, 'rgba(18,75,170,0.42)'); g1.addColorStop(0.5, 'rgba(8,35,100,0.20)'); g1.addColorStop(1, 'rgba(0,0,0,0)');
+  g1.addColorStop(0, 'rgba(255,255,255,0.03)'); g1.addColorStop(0.5, 'rgba(255,255,255,0.01)'); g1.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = g1; ctx.fillRect(0, 0, w, h);
   const g2 = ctx.createRadialGradient(w * (0.78 - shift), h * 0.40, 0, w * (0.78 - shift), h * 0.40, w * 0.48);
-  g2.addColorStop(0, 'rgba(22,110,170,0.26)'); g2.addColorStop(1, 'rgba(0,0,0,0)');
+  g2.addColorStop(0, 'rgba(255,255,255,0.02)'); g2.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = g2; ctx.fillRect(0, 0, w, h);
   const breathe = 0.08 + 0.06 * Math.sin(t * 0.0008);
   const g3 = ctx.createRadialGradient(w * 0.44, h * 0.44, 0, w * 0.44, h * 0.44, w * (0.22 + breathe));
-  g3.addColorStop(0, 'rgba(100,175,255,0.13)'); g3.addColorStop(1, 'rgba(0,0,0,0)');
+  g3.addColorStop(0, 'rgba(255,255,255,0.04)'); g3.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = g3; ctx.fillRect(0, 0, w, h);
   const g4 = ctx.createRadialGradient(w * 0.62, h * 0.60, 0, w * 0.62, h * 0.60, w * 0.35);
-  g4.addColorStop(0, `rgba(60,40,180,${0.08 + 0.04 * Math.sin(t * 0.0005)})`); g4.addColorStop(1, 'rgba(0,0,0,0)');
+  g4.addColorStop(0, `rgba(255,255,255,${0.02 + 0.01 * Math.sin(t * 0.0005)})`); g4.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = g4; ctx.fillRect(0, 0, w, h);
 }
 
@@ -244,7 +277,7 @@ function drawMouseGlow() {
   smoothMX += (mouseX - smoothMX) * 0.04; smoothMY += (mouseY - smoothMY) * 0.04;
   const w = W(), h = H(), cx = smoothMX * w, cy = smoothMY * h;
   const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, w * 0.30);
-  g.addColorStop(0, 'rgba(60,140,255,0.10)'); g.addColorStop(0.5, 'rgba(60,140,255,0.04)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+  g.addColorStop(0, 'rgba(255,255,255,0.03)'); g.addColorStop(0.5, 'rgba(255,255,255,0.01)'); g.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
 }
 

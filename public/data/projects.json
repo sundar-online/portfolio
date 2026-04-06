@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Electricity Consumption Predictor",
+    "description": "A high-fidelity ML dashboard comparing Linear Regression & Decision Trees for load forecasting. Features real-time metric tracking and automated model selection based on accuracy.",
+    "metrics": { "RMSE": "0.12", "MAE": "0.09", "R2": "0.98" },
+    "image": "/data/electricity_predictor.png",
+    "link": "https://electricity-predictor.vercel.app/",
+    "github_link": "https://github.com/sundar/electricity-predictor",
+    "details_link": "#electricity-details",
+    "tags": ["Scikit-Learn", "Python", "MLOps"]
+  },
+  {
+    "title": "Focus Flow: Productivity Dashboard",
+    "description": "A modern focus tracking app designed to minimize distractions and maximize deep work sessions. Features a minimalist dark dashboard and real-time activity analytics.",
+    "image": "/data/productivity_dashboard.png",
+    "link": "https://goal-forge-iota.vercel.app/",
+    "github_link": "https://github.com/sundar/focus-flow",
+    "details_link": "#focus-details",
+    "tags": ["React", "Framer Motion", "D3.js"]
+  },
+  {
+    "title": "Nexus E-Commerce Platform",
+    "description": "A next-generation e-commerce mobile application designed for high-end luxury brands, featuring seamless checkout flows, AR product previews, and minimalist aesthetics.",
+    "image": "/data/ecommerce_app.png",
+    "link": "#",
+    "github_link": "https://github.com/sundar/nexus-ecommerce",
+    "details_link": "#nexus-details",
+    "tags": ["Mobile", "E-commerce", "Stripe"]
+  }
+]
