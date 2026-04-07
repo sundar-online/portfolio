@@ -27,14 +27,12 @@ async function fetchProjects() {
     console.log('Successfully loaded projects:', projects.length);
     
     container.innerHTML = projects.map(p => {
-      // Ensure image path is also resilient
-      // If it starts with /data, we try both /data and public/data
-      const imgPath = p.image.startsWith('/') ? p.image : `/data/${p.image}`;
+      const imgPath = p.image;
       
       return `
         <div class="project-card">
           <div class="project-image">
-            <img src="${imgPath}" alt="${p.title}" loading="lazy" onerror="this.onerror=null; this.src='public${p.image}'">
+            <img src="${imgPath}" alt="${p.title}" loading="lazy" onerror="this.onerror=null; this.src='public/${p.image}'">
           </div>
           <div class="project-content">
             <h3 class="project-title">${p.title}</h3>
@@ -111,7 +109,7 @@ const NAVBAR_TEMPLATE = `
       </svg><span>home</span>
     </a>
 
-    <a class="nav-item" href="index.html#work">
+    <a class="nav-item" href="work.html">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
         <rect x="2" y="3" width="5" height="5" rx="1" />
         <rect x="9" y="3" width="5" height="5" rx="1" />
@@ -127,11 +125,11 @@ const NAVBAR_TEMPLATE = `
       </svg><span>about</span>
     </a>
 
-    <a class="nav-item" href="blog.html">
+    <a class="nav-item" href="contact.html">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
-        <path d="M13 2H3a1 1 0 00-1 1v10a1 1 0 001 1h10a1 1 0 001-1V3a1 1 0 00-1-1z" />
-        <path d="M5 6h6M5 9h4" />
-      </svg><span>blog</span>
+        <path d="M3 4h10a2 2 0 012 2v4a2 2 0 01-2 2H3a2 2 0 01-2-2V6a2 2 0 012-2z" />
+        <path d="M3 6l5 3 5-3" />
+      </svg><span>contact</span>
     </a>
 
     <div class="sep"></div>
@@ -160,8 +158,11 @@ function initNavbar() {
   const target = document.getElementById('navbar-target');
   if (!target) return;
   target.innerHTML = NAVBAR_TEMPLATE;
+  
   autoActivateNav();
   setupThemeToggle();
+  initSmoothScroll();
+  initScrollSpy();
 }
 
 function setupThemeToggle() {
@@ -171,7 +172,6 @@ function setupThemeToggle() {
   const sunIcon = document.getElementById('theme-icon-light');
   const moonIcon = document.getElementById('theme-icon-dark');
 
-  // Check persistent theme
   if (localStorage.getItem('theme') === 'light') {
     document.documentElement.classList.add('light-mode');
     if (sunIcon) sunIcon.style.display = 'block';
@@ -190,10 +190,60 @@ function setupThemeToggle() {
 }
 
 /* ── NAVIGATION LOGIC ── */
-function setActive(el) {
+function initSmoothScroll() {
+  const navLinks = document.querySelectorAll('.nav-item[href*="#"]');
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      const [page, hash] = href.split('#');
+      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+      // If it's an internal link on the current page
+      if (!page || page === currentPage || (page === 'index.html' && currentPage === '')) {
+        e.preventDefault();
+        const targetSection = document.getElementById(hash);
+        if (targetSection) {
+          window.history.pushState(null, null, `#${hash}`);
+          targetSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  });
+}
+
+function initScrollSpy() {
+  const page = window.location.pathname.split('/').pop() || 'index.html';
+  if (page !== 'index.html' && page !== '') return;
+
+  const sections = ['hero', 'work', 'projects'];
+  const sectionElements = sections.map(id => document.getElementById(id)).filter(el => el);
   const navItems = document.querySelectorAll('.nav-item');
-  navItems.forEach(item => item.classList.remove('active'));
-  el.classList.add('active');
+
+  window.addEventListener('scroll', () => {
+    let current = 'hero';
+    const scrollPos = window.scrollY + 150; // offset for nav height
+
+    sectionElements.forEach(el => {
+      if (scrollPos >= el.offsetTop) {
+        current = el.id;
+      }
+    });
+
+    navItems.forEach(item => {
+      item.classList.remove('active');
+      const href = item.getAttribute('href');
+      if (!href) return;
+
+      // Handle Home highlight
+      if (current === 'hero' && (href === 'index.html' || href === 'index.html#hero')) {
+        item.classList.add('active');
+      } 
+      // Handle Work/Projects mapping to 'work' link
+      else if ((current === 'work' || current === 'projects') && href.includes('#work')) {
+        item.classList.add('active');
+      }
+    });
+  });
 }
 
 function autoActivateNav() {
@@ -202,112 +252,48 @@ function autoActivateNav() {
   const hash = window.location.hash || '#hero';
   const navItems = document.querySelectorAll('.nav-item');
   
-  navItems.forEach(item => {
-    const href = item.getAttribute('href');
-    if (!href) return;
-    
-    const hrefBase = href.split('#')[0] || 'index.html';
-    const hrefHash = href.includes('#') ? '#' + href.split('#')[1] : null;
+  // Clear all first to ensure mutual exclusivity
+  navItems.forEach(item => item.classList.remove('active'));
 
-    // Direct match for simple pages (about.html, blog.html)
-    if (href === page) {
-       item.classList.add('active');
-    } 
-    // Section match for homepage (index.html)
-    else if (page === 'index.html' && hrefBase === 'index.html' && hrefHash === hash) {
-       item.classList.add('active');
-    }
-    // Default home highlight if no hash
-    else if (page === 'index.html' && href === 'index.html' && hash === '#hero') {
-       item.classList.add('active');
-    }
-    else {
-      item.classList.remove('active');
-    }
-  });
+  // 1. Exact page match (about.html, contact.html, work.html)
+  if (page === 'about.html' || page === 'contact.html' || page === 'work.html') {
+    navItems.forEach(item => {
+      const href = item.getAttribute('href');
+      if (href === page) {
+        item.classList.add('active');
+      }
+    });
+    return; // Exit
+  }
+
+  // 2. If on home (index.html or root) -> use section hash
+  if (page === 'index.html' || page === '') {
+    navItems.forEach(item => {
+      const href = item.getAttribute('href');
+      if (!href) return;
+
+      const hrefHash = href.includes('#') ? '#' + href.split('#')[1] : '#hero';
+      const normalizedHash = hash === '' ? '#hero' : hash;
+
+      if ((href === 'index.html' || href === 'index.html#hero') && normalizedHash === '#hero') {
+        item.classList.add('active');
+      } else if (href.includes(normalizedHash) && normalizedHash !== '#hero') {
+        item.classList.add('active');
+      }
+    });
+  }
 }
 
-// Re-run on hash change for SPA feel on index.html
-window.addEventListener('hashchange', autoActivateNav);
+// Update on hash change for SPA feel
+window.addEventListener('hashchange', () => {
+  autoActivateNav();
+});
 
 /* ── DOM READY ── */
 document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
   fetchProjects();
-  fetchBlogs();
 });
-
-/* ── FETCH BLOGS ── */
-async function fetchBlogs() {
-  const container = document.getElementById('blogs-container');
-  if (!container) return;
-
-  try {
-    let response = await fetch('/data/blogs.json');
-    if (!response.ok && response.status === 404) {
-      response = await fetch('public/data/blogs.json');
-    }
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    
-    const blogs = await response.json();
-    
-    container.innerHTML = blogs.map(blog => {
-      // Truncate content for "Read More" preview
-      const maxLength = 120;
-      const displayContent = blog.content.length > maxLength 
-        ? blog.content.substring(0, maxLength) + '...' 
-        : blog.content;
-
-      return `
-        <a href="blog.html" class="d-post-card">
-          <div class="d-post-vis" style="background: ${getBlogGradient(blog.visualType)};">
-            ${getBlogIcon(blog.visualType)}
-          </div>
-          <div class="d-post-content">
-            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
-              <h3 style="margin: 0;">${blog.title}</h3>
-              <span style="font-size: 10px; color: rgba(255,255,255,0.3); white-space: nowrap; margin-left: 10px;">${blog.date}</span>
-            </div>
-            <p>${displayContent}</p>
-            <div class="d-post-tags">
-              ${blog.tags.map(tag => `<span class="d-post-tag">${tag}</span>`).join('')}
-              <span class="d-post-tag" style="background: rgba(255,255,255,0.05); color: #ffffff; border: none; padding-left: 0;">Read More →</span>
-            </div>
-          </div>
-        </a>
-      `;
-    }).join('');
-  } catch (error) {
-    console.error('Error fetching blogs:', error);
-    container.innerHTML = `<p style="padding: 20px; color: rgba(255,255,255,0.3); font-size: 13px;">Error loading posts: ${error.message}</p>`;
-  }
-}
-
-function getBlogGradient(type) {
-  const gradients = {
-    code: 'linear-gradient(135deg,rgba(96,165,250,0.1),rgba(96,165,250,0.02))',
-    dream: 'linear-gradient(135deg,rgba(167,139,250,0.1),rgba(167,139,250,0.02))',
-    neural: 'linear-gradient(135deg,rgba(45,212,191,0.1),rgba(45,212,191,0.02))'
-  };
-  return gradients[type] || gradients.code;
-}
-
-function getBlogIcon(type) {
-  const icons = {
-    code: `<svg viewBox="0 0 64 64" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:40px; opacity:0.8;">
-            <rect x="8" y="14" width="48" height="36" rx="4" />
-            <path d="M22 26l-8 6 8 6M42 26l8 6-8 6M34 22l-4 20" />
-          </svg>`,
-    dream: `<svg viewBox="0 0 48 48" fill="none" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:32px; opacity:0.8;">
-            <circle cx="24" cy="24" r="16" />
-            <path d="M24 14v10l6 6" />
-          </svg>`,
-    neural: `<svg class="big" viewBox="0 0 48 48" fill="none" stroke="#2dd4bf" stroke-width="1.4" stroke-linecap="round" style="width:32px; opacity:0.8;">
-            <path d="M24 10v20M14 20l10 10 10-10" />
-          </svg>`
-  };
-  return icons[type] || icons.code;
-}
 
 /* ── CANVAS BACKGROUND ── */
 const canvas = document.getElementById('bg');
