@@ -46,19 +46,34 @@
       "Supabase",
       "Tailwind CSS"
     ]
-  },{
-  "title": "Face Recognition Attendance System",
-  "description": "An AI-powered attendance monitoring system using OpenCV and Python. It detects and recognizes faces in real-time, captures student images, trains face templates, and automatically marks attendance with timestamps.",
-  "image": "/public/data/project4.png",
-  "link": "#",
-  "github_link": "https://github.com/sundar/face-attendance",
-  "details_link": "#face-details",
-  "category": "DL",
-  "tags": [
-    "Python",
-    "OpenCV",
-    "Tkinter",
-    "Computer Vision"
-  ]
-}
+  },
+  {
+    "title": "Face Recognition Attendance System",
+    "description": "An AI-powered attendance monitoring system using OpenCV and Python. It detects and recognizes faces in real-time, captures student images, trains face templates, and automatically marks attendance with timestamps.",
+    "image": "/public/data/project4.png",
+    "link": "#",
+    "github_link": "https://github.com/sundar/face-attendance",
+    "details_link": "#face-details",
+    "category": "DL",
+    "tags": [
+      "Python",
+      "OpenCV",
+      "Tkinter",
+      "Computer Vision"
+    ]
+  },
+  {
+    "title": "XO Game – Tic Tac Toe",
+    "description": "An interactive Tic Tac Toe game built using HTML, CSS, and JavaScript with a clean UI and smooth gameplay experience.",
+    "image": "/public/data/project5.png",
+    "link": "https://sundar-online.github.io/XO-Game/",
+    "github_link": "https://github.com/sundar-online/XO-Game",
+    "details_link": "#xo-details",
+    "category": "Web",
+    "tags": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ]
+  }
 ]
