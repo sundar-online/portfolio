@@ -1,1053 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sundar-online</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap"
-    rel="stylesheet" />
+  <title>Sundaramoorthy | Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
-  <style>
-    /* ── NAVBAR ── */
-    /* Global Monochrome Image Filters */
-    img,
-    .tech-logo,
-    .project-image-wrap img,
-    .fv-icon img {
-      transition: transform 0.4s ease, filter 0.4s ease;
-    }
-
-    .project-image-wrap:hover img {
-      transform: scale(1.05);
-    }
-
-    /* ── NAVBAR ── */
-    /* Ported to style.css */
-
-    /* ── DASHBOARD LAYOUT ── */
-    .dashboard-layout {
-      position: relative;
-      z-index: 10;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0;
-      max-width: 1400px;
-      margin: 120px auto 40px;
-      padding: 0 40px;
-      width: 100%;
-    }
-
-    .dashboard-left {
-      width: 100%;
-    }
-
-    @media (max-width: 900px) {
-      .dashboard-layout {
-        grid-template-columns: 1fr;
-        margin-top: 100px;
-        padding: 0 24px;
-      }
-    }
-
-    /* ── HERO SECTION ── */
-    .hero-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 0 60px;
-      text-align: center;
-      min-height: 50vh;
-    }
-
-    .hero-inner {
-      animation: heroFade 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
-    }
-
-    @keyframes heroFade {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 11px;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 5px 16px 5px 10px;
-      border-radius: 999px;
-      margin-bottom: 22px;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-    }
-
-    .badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #60a5fa;
-      box-shadow: 0 0 10px #60a5fa;
-      animation: pulse 2s ease infinite;
-    }
-
-    @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-
-      50% {
-        opacity: 0.6;
-        transform: scale(0.85);
-      }
-    }
-
-    h1 {
-      font-family: "Syne", sans-serif;
-      font-size: clamp(36px, 5vw, 64px);
-      font-weight: 400;
-      line-height: 1.18;
-      letter-spacing: -0.03em;
-      color: rgba(255, 255, 255, 0.9);
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    h1 em {
-      font-style: normal;
-      background: linear-gradient(100deg,
-          #ffffff 10%,
-          #888888 60%,
-          #e0e0e0 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      background-size: 200% 100%;
-      animation: shimmer 5s linear infinite;
-    }
-
-    @keyframes shimmer {
-      0% {
-        background-position: 200% center;
-      }
-
-      100% {
-        background-position: -200% center;
-      }
-    }
-
-    .sub {
-      margin-top: 18px;
-      font-size: 14px;
-      font-weight: 300;
-      letter-spacing: 0.03em;
-      color: rgba(255, 255, 255, 0.4);
-    }
-
-    .sub span {
-      color: rgba(255, 255, 255, 0.15);
-      margin: 0 8px;
-    }
-
-    /* ── ROLES ── */
-    .roles {
-      display: flex;
-      gap: 14px;
-      margin-top: 30px;
-      flex-wrap: wrap;
-      justify-content: flex-start;
-    }
-
-    .role-card {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 20px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.038);
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      backdrop-filter: blur(12px);
-      transition: background 0.25s, box-shadow 0.25s, transform 0.2s;
-    }
-
-    .role-card:hover {
-      background: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 0 28px rgba(255, 255, 255, 0.08);
-      transform: translateY(-3px);
-    }
-
-    .role-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .role-icon.n1 {
-      background: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.08);
-    }
-
-    .role-icon.n2 {
-      background: rgba(255, 255, 255, 0.05);
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.05);
-    }
-
-    .role-icon svg {
-      width: 20px;
-      height: 20px;
-    }
-
-    .role-info {
-      text-align: left;
-    }
-
-    .role-title {
-      font-size: 13px;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.88);
-      letter-spacing: 0.01em;
-    }
-
-    .role-sub {
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.4);
-      margin-top: 1px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 32px;
-      flex-wrap: wrap;
-      justify-content: flex-start;
-    }
-
-    .btn-primary {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 11px 24px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      color: #000000;
-      cursor: pointer;
-      background: linear-gradient(135deg,
-          rgba(255, 255, 255, 1) 0%,
-          rgba(220, 220, 220, 1) 100%);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      transition: background 0.25s, box-shadow 0.25s, transform 0.15s;
-      text-decoration: none;
-      font-family: "DM Sans", sans-serif;
-    }
-
-    .btn-primary:hover {
-      background: linear-gradient(135deg,
-          rgba(255, 255, 255, 0.9) 0%,
-          rgba(240, 240, 240, 1) 100%);
-      box-shadow: 0 0 36px rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px);
-    }
-
-    .btn-ghost {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 11px 24px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 400;
-      letter-spacing: 0.02em;
-      color: rgba(255, 255, 255, 0.6);
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.035);
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      backdrop-filter: blur(10px);
-      transition: background 0.25s, color 0.25s, transform 0.15s;
-      text-decoration: none;
-      font-family: "DM Sans", sans-serif;
-    }
-
-    .btn-ghost:hover {
-      background: rgba(255, 255, 255, 0.07);
-      color: rgba(255, 255, 255, 0.9);
-      transform: translateY(-2px);
-    }
-
-    .btn-ghost svg,
-    .btn-primary svg {
-      width: 14px;
-      height: 14px;
-    }
-
-    /* ── SKILLS SECTION ── */
-    .skills-section {
-      padding: 80px 24px 100px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 40px;
-      justify-content: center;
-    }
-
-    .section-label-line {
-      flex: 1;
-      max-width: 80px;
-      height: 1px;
-      background: linear-gradient(to right,
-          transparent,
-          rgba(255, 255, 255, 0.2));
-    }
-
-    .section-label-line.right {
-      background: linear-gradient(to left,
-          transparent,
-          rgba(255, 255, 255, 0.2));
-    }
-
-    .section-label-text {
-      font-family: "Syne", sans-serif;
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    /* ── SKILLS SECTION ── */
-    .skills-section {
-      padding: 40px 0 20px;
-      width: 100%;
-    }
-
-    .section-label {
-      justify-content: flex-start;
-    }
-
-    .section-label-line.right {
-      display: none;
-    }
-
-    .compact-grid {
-      grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)) !important;
-      gap: 14px !important;
-    }
-
-    .compact-grid .skill-pill {
-      padding: 16px !important;
-    }
-
-    .compact-grid .skill-name {
-      display: none !important;
-    }
-
-    /* ── DASHBOARD RIGHT (BLOG CARDS) ── */
-    .dashboard-right h2 {
-      font-family: var(--font-heading);
-      font-size: 28px;
-      color: var(--text-primary);
-      text-align: right;
-      margin: 0 0 30px 0;
-    }
-
-    .d-post-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 20px;
-      display: flex;
-      gap: 20px;
-      transition: background 0.3s, transform 0.3s;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .d-post-card:hover {
-      background: rgba(255, 255, 255, 0.04);
-      transform: translateY(-2px);
-    }
-
-    .d-post-vis {
-      width: 120px;
-      height: 120px;
-      flex-shrink: 0;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .d-post-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      text-align: left;
-    }
-
-    .d-post-content h3 {
-      font-family: "Syne", sans-serif;
-      font-size: 18px;
-      color: var(--text-primary);
-      margin: 0 0 8px 0;
-      line-height: 1.3;
-    }
-
-    .d-post-content p {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin: 0 0 16px 0;
-      line-height: 1.5;
-      display: -webkit-box;
-      line-clamp: 2;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .d-post-tags {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: auto;
-    }
-
-    .d-post-tag {
-      font-size: 10px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.05);
-      color: rgba(255, 255, 255, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
-      gap: 16px;
-      justify-content: center;
-    }
-
-    .skill-pill {
-      aspect-ratio: 1 / 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 12px;
-      border-radius: 24px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      animation: skillFadeIn 0.8s ease both;
-      box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.01),
-        0 4px 24px rgba(0, 0, 0, 0.3);
-    }
-
-    .skill-pill:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.25);
-      transform: translateY(-6px) scale(1.06);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4),
-        0 0 20px rgba(255, 255, 255, 0.08);
-    }
-
-    @keyframes skillFadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(18px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .skill-icon {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.3s ease;
-    }
-
-    .skill-icon svg {
-      width: 34px;
-      height: 34px;
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.1));
-    }
-
-    .skill-pill:hover .skill-icon {
-      transform: scale(1.1);
-    }
-
-    .skill-name {
-      font-size: 10px;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.3);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-top: 4px;
-      opacity: 0;
-      transition: opacity 0.3s ease, color 0.3s ease;
-    }
-
-    .skill-pill:hover .skill-name {
-      opacity: 1;
-      color: rgba(255, 255, 255, 0.85);
-    }
-
-    /* unified neutral hover glow */
-    .skill-pill:hover {
-      box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .skill-pill:hover .skill-name {
-      color: rgba(255, 255, 255, 0.9);
-    }
-
-    /* ── SCROLL HINT ── */
-    .scroll-hint {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      margin-top: 36px;
-      opacity: 0.35;
-      animation: scrollBob 2.5s ease infinite;
-    }
-
-    @keyframes scrollBob {
-
-      0%,
-      100% {
-        transform: translateY(0);
-        opacity: 0.35;
-      }
-
-      50% {
-        transform: translateY(6px);
-        opacity: 0.55;
-      }
-    }
-
-    .scroll-hint span {
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.4);
-    }
-
-    .scroll-line {
-      width: 1px;
-      height: 28px;
-      background: linear-gradient(to bottom,
-          rgba(255, 255, 255, 0.3),
-          transparent);
-    }
-
-    /* divider */
-    .divider {
-      width: 100%;
-      max-width: 600px;
-      height: 1px;
-      background: linear-gradient(to right,
-          transparent,
-          rgba(255, 255, 255, 0.1),
-          transparent);
-      margin: 0 auto;
-    }
-
-    /* ── FEATURED PROJECTS SECTION ── */
-    #projects {
-      padding: 60px 0 100px;
-      width: 100%;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-      gap: 40px;
-    }
-
-    .project-card {
-      display: flex;
-      flex-direction: column;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 32px;
-      overflow: hidden;
-      backdrop-filter: blur(20px);
-      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-      position: relative;
-      height: 100%;
-    }
-
-    .project-card:hover {
-      background: rgba(255, 255, 255, 0.04);
-      border-color: rgba(255, 255, 255, 0.15);
-      transform: translateY(-10px);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-    }
-
-    .project-image {
-      height: 300px;
-      position: relative;
-      overflow: hidden;
-      background: #000;
-      flex-shrink: 0;
-    }
-
-    .project-image::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to right,
-          rgba(10, 10, 15, 0.4),
-          transparent 30%,
-          transparent 70%,
-          rgba(10, 10, 15, 0.4));
-      pointer-events: none;
-    }
-
-    .project-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-
-    .project-card:hover .project-image img {
-      transform: scale(1.05);
-    }
-
-    .project-content {
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      background: linear-gradient(135deg,
-          rgba(255, 255, 255, 0.03) 0%,
-          transparent 100%);
-    }
-
-    .project-title {
-      font-family: "Syne", sans-serif;
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 16px;
-      letter-spacing: -0.02em;
-    }
-
-    .project-desc {
-      font-size: 16px;
-      color: var(--text-muted);
-      line-height: 1.7;
-      margin-bottom: 32px;
-    }
-
-    .project-metrics {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-
-    .metric-item {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 12px 16px;
-      border-radius: 16px;
-      min-width: 90px;
-      text-align: center;
-    }
-
-    .metric-label {
-      font-size: 10px;
-      color: rgba(255, 255, 255, 0.4);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      margin-bottom: 4px;
-    }
-
-    .metric-value {
-      font-size: 16px;
-      font-weight: 600;
-      color: #ffffff;
-    }
-
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 40px;
-    }
-
-    .project-tag {
-      font-size: 11px;
-      padding: 6px 14px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.03);
-      color: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .project-actions {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-top: auto;
-    }
-
-    .btn-project {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 22px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-      text-decoration: none;
-      font-family: "DM Sans", sans-serif;
-    }
-
-    .btn-project.btn-demo {
-      background: rgba(96, 165, 250, 0.12);
-      border: 1px solid rgba(96, 165, 250, 0.3);
-      color: #60a5fa;
-      box-shadow: 0 4px 20px rgba(96, 165, 250, 0.1);
-    }
-
-    .btn-project.btn-demo:hover {
-      background: #60a5fa;
-      color: #000000;
-      box-shadow: 0 8px 30px rgba(96, 165, 250, 0.3);
-      transform: translateY(-2px);
-    }
-
-    .btn-code {
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-primary);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .btn-code:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .btn-details {
-      color: rgba(255, 255, 255, 0.5);
-      padding: 12px 8px;
-    }
-
-    .btn-details:hover {
-      color: var(--text-primary);
-    }
-
-    .btn-project svg {
-      width: 18px;
-      height: 18px;
-    }
-
-    /* ── RESPONSIVE OVERHAUL ── */
-    @media (max-width: 1200px) {
-      .dashboard-layout {
-        max-width: 100%;
-        gap: 40px;
-        grid-template-columns: 1.2fr 0.8fr;
-      }
-
-      .project-content {
-        padding: 32px;
-      }
-
-      .project-title {
-        font-size: 28px;
-      }
-    }
-
-    @media (max-width: 1024px) {
-      .dashboard-layout {
-        grid-template-columns: 1fr;
-        margin-top: 100px;
-        gap: 60px;
-        width: 100%;
-        max-width: 100%;
-        padding: 0 24px;
-      }
-
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .project-card,
-      .project-card:nth-child(even) {
-        flex-direction: column !important;
-        min-height: auto;
-      }
-
-      .project-image {
-        width: 100%;
-        height: 320px;
-        flex: none;
-      }
-
-      .project-content {
-        width: 100%;
-        flex: none;
-        padding: 40px 32px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .nav-wrap {
-        padding-top: 12px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-      }
-
-      nav {
-        padding: 4px 8px;
-        gap: 4px;
-      }
-
-      .nav-item {
-        padding: 8px 12px;
-        font-size: 13px;
-      }
-
-      .nav-item span {
-        display: none;
-      }
-
-      .logo-text {
-        display: none;
-      }
-
-      .nav-logo {
-        padding-right: 6px;
-        margin-right: 0;
-      }
-
-      .hero-section {
-        align-items: center;
-        text-align: center;
-      }
-
-      h1 {
-        font-size: 42px;
-        text-align: center;
-      }
-
-      .roles {
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      .actions {
-        justify-content: center;
-        width: 100%;
-      }
-
-      .dashboard-layout {
-        padding: 0 20px;
-        margin-top: 80px;
-      }
-
-      .project-title {
-        font-size: 24px;
-      }
-
-      .project-metrics {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .project-actions {
-        flex-direction: column;
-        align-items: stretch;
-        width: 100%;
-      }
-
-      .btn-project {
-        justify-content: center;
-      }
-    }
-
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 32px;
-      }
-
-      .project-image {
-        height: 220px;
-      }
-
-      .metric-item {
-        flex: 1;
-        min-width: 100px;
-      }
-
-      .nav-cta {
-        padding: 6px 12px;
-        font-size: 11px;
-      }
-
-      .badge {
-        margin-bottom: 16px;
-      }
-    }
-  </style>
 </head>
-
 <body>
+  <!-- Global Canvas Background -->
   <canvas id="bg"></canvas>
 
   <div class="page">
-    <!-- NAV -->
-    <!-- NAV PLACEHOLDER -->
+    <!-- Navbar injected here by script.js -->
     <div id="navbar-target"></div>
 
-    <div class="dashboard-layout">
-      <!-- LEFT COLUMN -->
-      <div class="dashboard-left">
-        <!-- HERO -->
-        <section class="hero-section" id="hero">
-          <div class="hero-inner">
-            <div style="
-                  display: flex;
-                  flex-direction: column;
-                  align-items: center;
-                  gap: 16px;
-                  margin-bottom: 24px;
-                ">
-              <h1 style="margin: 0; font-size: 3.5rem; letter-spacing: -0.02em">
-                Sundaramoorthy
-              </h1>
-              <div style="display: flex; gap: 20px; align-items: center; justify-content: center; margin-top: 8px;">
-                <a href="https://github.com/Sundaramoorthy-G" target="_blank" style="
-                      color: rgba(255, 255, 255, 0.7);
-                      transition: color 0.2s;
-                    "><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                    <path
-                      d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.376.202 2.394.1 2.646.64.699 1.026 1.591 1.026 2.683 0 3.842-2.337 4.687-4.565 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z" />
-                  </svg></a>
-                <a href="https://www.linkedin.com/init/sundaramoorthy-g-aa828a252/" target="_blank" style="
-                      color: rgba(255, 255, 255, 0.7);
-                      transition: color 0.2s;
-                    "><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                    <path
-                      d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                  </svg></a>
-                <a href="https://www.credly.com/users/sundaramoorthy-g.b88506e7" target="_blank" style="
-                      color: #ffffff;
-                      font-weight: 500;
-                      font-size: 14px;
-                      font-family: 'Syne', sans-serif;
-                      text-decoration: none;
-                      padding-bottom: 2px;
-                      opacity: 0.7;
-                    ">Credly</a>
-              </div>
+    <div class="container">
+      
+      <!-- HERO SECTION -->
+      <section class="hero fade-up" id="hero">
+        <h1>Sundaramoorthy</h1>
+        <div class="type-wrap">
+          <span id="typewriter" class="typing-text"></span>
+        </div>
+        <p class="tagline">I build intelligent systems that solve real-world problems</p>
+        <div class="hero-btns">
+          <a href="work.html" class="btn btn-primary">View Work
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="contact.html" class="btn btn-secondary">Contact Me</a>
+        </div>
+      </section>
+
+      <!-- PROGRAMMING LANGUAGES & TOOLS -->
+      <section id="tech-stack" class="fade-up">
+        <h2 class="section-title" style="margin-bottom: 8px;">Programming Languages & Tools</h2>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 40px; font-size: 16px;">
+          Technologies I use to build scalable and intelligent applications
+        </p>
+
+        <div class="projects-grid">
+          
+          <!-- Category 1: Languages -->
+          <div class="glass-card" style="padding: 32px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              <h3 style="font-size: 20px;">Programming Languages</h3>
             </div>
-
-            <p class="sub" style="
-                  margin-top: 0;
-                  line-height: 1.6;
-                  color: var(--text-secondary);
-                  font-size: 16px;
-                  opacity: 0.9;
-                ">
-              I'm building myself to be the best version.<br />
-              <span style="color: var(--text-muted); opacity: 0.8;">Data Scientist and Fullstack Developer</span>
-            </p>
-
-            <div style="
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  gap: 8px;
-                  margin-top: 16px;
-                  margin-bottom: 24px;
-                  color: rgba(255, 255, 255, 0.5);
-                  font-size: 14px;
-                ">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                stroke-linejoin="round" style="width: 16px; height: 16px">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              Chennai, IN
-            </div>
-
-            <div class="actions" style="
-                  margin-top: 28px;
-                  display: flex;
-                  gap: 12px;
-                  flex-wrap: wrap;
-                  justify-content: center;
-                ">
-              <a class="btn-primary" href="about.html" style="
-                    background: rgba(255, 255, 255, 0.95);
-                    color: #111;
-                    border: none;
-                    font-weight: 600;
-                    box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
-                  ">
-                Know Me
-              </a>
+            <div class="tech-icon-grid">
+              <div class="tech-icon" title="Python"><img src="icons/python.png" alt="Python"></div>
+              <div class="tech-icon" title="Java"><img src="icons/java.png" alt="Java"></div>
+              <div class="tech-icon" title="C"><img src="icons/c.png" alt="C"></div>
+              <div class="tech-icon" title="C++"><img src="icons/c++.png" alt="C++"></div>
+              <div class="tech-icon" title="R"><img src="icons/R.png" alt="R"></div>
             </div>
           </div>
-        </section>
 
-      </div>
-      <!-- end dashboard-left -->
+          <!-- Category 2: Web Technologies -->
+          <div class="glass-card" style="padding: 32px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+              <h3 style="font-size: 20px;">Web Technologies</h3>
+            </div>
+            <div class="tech-icon-grid">
+              <div class="tech-icon" title="HTML"><img src="icons/html.png" alt="HTML"></div>
+              <div class="tech-icon" title="CSS"><img src="icons/css-3.png" alt="CSS"></div>
+              <div class="tech-icon" title="JavaScript"><img src="icons/java-script.png" alt="JavaScript"></div>
+              <div class="tech-icon" title="React"><img src="icons/structure.png" alt="React"></div>
+              <div class="tech-icon" title="Next.js"><img src="icons/Next.js.png" alt="Next.js"></div>
+            </div>
+          </div>
+
+          <!-- Category 3: Tools & Platforms -->
+          <div class="glass-card" style="padding: 32px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              <h3 style="font-size: 20px;">Tools & Platforms</h3>
+            </div>
+            <div class="tech-icon-grid">
+              <div class="tech-icon" title="Git"><img src="icons/Git.png" alt="Git"></div>
+              <div class="tech-icon" title="Docker"><img src="icons/Docker.png" alt="Docker"></div>
+              <div class="tech-icon" title="Google Cloud Platform"><img src="icons/Google Cloud.png" alt="GCP"></div>
+              <div class="tech-icon" title="MySQL"><img src="icons/MySQL.png" alt="MySQL"></div>
+              <div class="tech-icon" title="PostgreSQL"><svg viewBox="0 0 24 24" width="24" height="24" fill="#336791"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 19.821a7.822 7.822 0 1 1 0-15.645 7.822 7.822 0 0 1 0 15.645zm3.5-7.5l-6 3.5v-7l6 3.5z"/></svg></div>
+              <div class="tech-icon" title="Supabase"><svg viewBox="0 0 24 24" width="24" height="24" fill="#3ECF8E"><path d="M21.36 8.53l-8.48-4.9a2.29 2.29 0 0 0-2.3 0L2.1 8.53A2.3 2.3 0 0 0 1 10.5v5a2.3 2.3 0 0 0 1.1 2l8.48 4.9a2.29 2.29 0 0 0 2.3 0l8.48-4.9A2.3 2.3 0 0 0 22.46 15.5v-5a2.3 2.3 0 0 0-1.1-1.97z"/></svg></div>
+              <div class="tech-icon" title="MongoDB"><img src="icons/MongoDB.png" alt="MongoDB"></div>
+            </div>
+          </div>
+
+          <!-- Category 4: AI & Machine Learning -->
+          <div class="glass-card" style="padding: 32px;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <h3 style="font-size: 20px;">AI & Machine Learning</h3>
+            </div>
+            <div class="tech-icon-grid">
+              <div class="tech-icon" title="Machine Learning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h4l3-9 5 18 3-9h5"/></svg></div>
+              <div class="tech-icon" title="Deep Learning"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+              <div class="tech-icon" title="NLP"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+              <div class="tech-icon" title="Computer Vision"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+              <div class="tech-icon" title="Scikit-learn"><svg viewBox="0 0 24 24" fill="none" stroke="#F7931E" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l4-4 4 4"/></svg></div>
+              <div class="tech-icon" title="Pandas"><svg viewBox="0 0 24 24" fill="none" stroke="#150458" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/></svg></div>
+              <div class="tech-icon" title="NumPy"><svg viewBox="0 0 24 24" fill="none" stroke="#4D77CF" stroke-width="2"><polygon points="12 4 4 20 20 20"/></svg></div>
+              <div class="tech-icon" title="OpenCV"><svg viewBox="0 0 24 24" fill="none" stroke="#5C3EE8" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+
+      <!-- STATS SECTION -->
+      <section id="stats" class="fade-up">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <h4 data-target="24" class="counter">0</h4>
+            <p>Projects Completed</p>
+          </div>
+          <div class="stat-item">
+            <h4 data-target="15" class="counter">0</h4>
+            <p>Technologies Used</p>
+          </div>
+          <div class="stat-item">
+            <h4><span data-target="3" class="counter">0</span>+</h4>
+            <p>Years Experience</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT PREVIEW -->
+      <section id="about-preview" class="fade-up">
+        <div class="glass-card preview-card">
+          <h2>Who am I?</h2>
+          <p>I combine analytical prowess from Data Science with the robust architecture of Full Stack engineering to deliver intelligent, end-to-end applications that drive real impact.</p>
+          <a href="about.html" class="btn btn-secondary">Read My Story</a>
+        </div>
+      </section>
+
+      <!-- CONTACT CTA -->
+      <section id="contact-cta" class="fade-up">
+        <div class="glass-card cta-card" style="border-color: rgba(255,255,255,0.2);">
+          <h2>Have an idea?<br>Let's turn it into reality 🚀</h2>
+          <p>Whether you're looking for an AI integration or a robust web application, I'm ready to help you build the future.</p>
+          <a href="contact.html" class="btn btn-primary" style="padding: 16px 32px; font-size: 16px;">
+            Start a Conversation
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </a>
+        </div>
+      </section>
+
     </div>
-    <!-- end dashboard-layout -->
   </div>
-  <!-- end .page -->
 
   <script src="script.js"></script>
 </body>
-
 </html>

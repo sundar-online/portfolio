@@ -1,80 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact — Sundar</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet" />
+  <title>Sundaramoorthy | Contact</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
   <canvas id="bg"></canvas>
 
-  <!-- NAV PLACEHOLDER -->
-  <div id="navbar-target"></div>
+  <div class="page">
+    <div id="navbar-target"></div>
 
-  <div class="page" style="margin-top: 140px; padding: 0 24px 80px;">
-    
-    <div class="contact-container">
-      <div style="text-align: center; margin-bottom: 48px;">
-        <h1 style="font-family: 'Syne', sans-serif; font-size: clamp(32px, 6vw, 56px); margin-bottom: 16px; color: #fff; letter-spacing: -0.04em;">Get in <span style="font-family: 'DM Sans', sans-serif; font-style: italic; font-weight: 400; color: var(--text-secondary);">Touch</span></h1>
-        <p style="color: var(--text-secondary); font-size: 17px; line-height: 1.6; max-width: 400px; margin: 0 auto;">Have a project in mind, or just want to say hi? Send me a message below.</p>
-      </div>
+    <div class="container" style="padding-top: 120px; padding-bottom: 80px;">
+      
+      <section class="fade-up">
+        <div class="glass-card contact-form-wrap">
+          <h1 style="font-size: 36px; margin-bottom: 12px; text-align: center;">Get in Touch</h1>
+          <p style="text-align: center; color: var(--text-muted); margin-bottom: 32px;">
+            Let me know how I can help you build your next intelligent system.
+          </p>
 
-      <form id="contact-form" class="contact-form" action="#" method="get">
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" placeholder="John Doe" required />
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="John Doe" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="john@example.com" required />
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" placeholder="Tell me about your project..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 12px; padding: 16px; font-size: 16px;">
+              Send Message
+            </button>
+          </form>
         </div>
-        
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="john@example.com" required />
-        </div>
-        
-        <div class="form-group">
-          <label for="message">Message</label>
-          <textarea id="message" name="message" placeholder="Hi Sundar, I'd like to discuss..." required></textarea>
-        </div>
-        
-        <div style="text-align: center; margin-top: 16px;">
-          <button type="button" class="submit-btn" onclick="sendEmail()">
-            Send Message
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;">
-              <line x1="22" y1="2" x2="11" y2="13"></line>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-            </svg>
-          </button>
-        </div>
-      </form>
+      </section>
+
     </div>
-    
   </div>
 
   <script src="script.js"></script>
-  <script>
-    function sendEmail() {
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const message = document.getElementById('message').value.trim();
-
-      if (!name || !email || !message) {
-        alert("Please fill in all fields before sending.");
-        return;
-      }
-
-      // Construct email body
-      const subject = encodeURIComponent(`Contact from Portfolio - ${name}`);
-      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
-
-      // Open mail client
-      window.location.href = `mailto:yourmail@example.com?subject=${subject}&body=${body}`;
-    }
-  </script>
 </body>
-
 </html>
