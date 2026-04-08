@@ -47,11 +47,53 @@ const NAVBAR_TEMPLATE = `
 </div>
 `;
 
+/* ── REUSABLE FOOTER COMPONENT ── */
+const FOOTER_TEMPLATE = `
+<footer>
+  <div class="container footer-content">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width: 24px; height: 24px;">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+        </svg>
+        <span>Sundar.</span>
+      </div>
+      <p>Building the future of intelligent systems.</p>
+    </div>
+    
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <a href="index.html">Home</a>
+        <a href="work.html">Work</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Socials</h4>
+        <a href="#" target="_blank">LinkedIn</a>
+        <a href="#" target="_blank">GitHub</a>
+        <a href="#" target="_blank">Twitter</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; ${new Date().getFullYear()} Sundaramoorthy. All rights reserved.</p>
+  </div>
+</footer>
+`;
+
 function initNavbar() {
   const target = document.getElementById('navbar-target');
   if (!target) return;
   target.innerHTML = NAVBAR_TEMPLATE;
   autoActivateNav();
+}
+
+function initFooter() {
+  const target = document.getElementById('footer-target');
+  if (!target) return;
+  target.innerHTML = FOOTER_TEMPLATE;
 }
 
 function autoActivateNav() {
@@ -122,7 +164,7 @@ function initScrollAnimations() {
     });
   }, observerOptions);
 
-  document.querySelectorAll('.fade-up').forEach(el => {
+  document.querySelectorAll('.fade-up:not(.visible)').forEach(el => {
     observer.observe(el);
   });
 }
@@ -168,6 +210,8 @@ function initContactForm() {
 }
 
 /* ── FETCH PROJECTS (DYNAMIC) ── */
+let allProjects = [];
+
 async function fetchProjects() {
   const container = document.getElementById('projects-container');
   if (!container) return;
@@ -180,35 +224,82 @@ async function fetchProjects() {
 
     if (!response.ok) throw new Error("HTTP error");
 
-    const projects = await response.json();
-    
-    container.innerHTML = projects.map(p => {
-      return `
-        <div class="glass-card">
-          <img class="project-img" src="${p.image}" alt="${p.title}" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800'">
-          <div class="project-info">
-            <h3>${p.title}</h3>
-            <div class="badges">
-              ${(p.tags || []).map(tag => `<span class="badge">${tag}</span>`).join('')}
-            </div>
-            <p>${p.description}</p>
-            <div class="card-actions">
-              <a href="${p.link || '#'}" class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;">Live Demo</a>
-              <a href="${p.github_link || '#'}" class="btn btn-secondary" style="padding: 8px 16px; font-size: 13px;">GitHub</a>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
+    allProjects = await response.json();
+    renderProjects(allProjects);
+    initFilters();
   } catch (error) {
     console.error('Error fetching projects:', error);
     container.innerHTML = `<p style="text-align:center; color: var(--text-muted); grid-column: 1/-1;">Could not load dynamic projects.</p>`;
   }
 }
 
+function renderProjects(projects) {
+  const container = document.getElementById('projects-container');
+  if (!container) return;
+
+  if (projects.length === 0) {
+    container.innerHTML = `<p style="text-align:center; color: var(--text-muted); grid-column: 1/-1; padding: 40px;">No projects found in this category.</p>`;
+    return;
+  }
+
+  container.innerHTML = projects.map((p, index) => {
+    return `
+      <div class="glass-card fade-up" style="transition-delay: ${index * 100}ms">
+        <div class="project-img-container">
+          <img class="project-img" src="${p.image}" alt="${p.title}" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800'">
+        </div>
+        <div class="project-info">
+          <div class="project-category-tag">${p.category || 'Project'}</div>
+          <h3>${p.title}</h3>
+          <div class="badges">
+            ${(p.tags || []).map(tag => `<span class="badge">${tag}</span>`).join('')}
+          </div>
+          <p>${p.description}</p>
+          <div class="card-actions">
+            <a href="${p.link || '#'}" class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;">Live Demo</a>
+            <a href="${p.github_link || '#'}" class="btn btn-secondary" style="padding: 8px 16px; font-size: 13px;">GitHub</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Re-run intersection observer for new elements
+  initScrollAnimations();
+}
+
+function initFilters() {
+  const filterContainer = document.getElementById('filter-container');
+  if (!filterContainer) return;
+
+  const categories = ['All', ...new Set(allProjects.map(p => p.category).filter(Boolean))];
+  
+  filterContainer.innerHTML = categories.map(cat => `
+    <button class="filter-btn ${cat === 'All' ? 'active' : ''}" data-category="${cat}">${cat}</button>
+  `).join('');
+
+  const buttons = filterContainer.querySelectorAll('.filter-btn');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update UI
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Filter Projects
+      const category = btn.getAttribute('data-category');
+      const filtered = category === 'All' 
+        ? allProjects 
+        : allProjects.filter(p => p.category === category);
+      
+      renderProjects(filtered);
+    });
+  });
+}
+
 /* ── DOM READY ── */
 document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
+  initFooter();
   typeEffect();
   initScrollAnimations();
   initContactForm();

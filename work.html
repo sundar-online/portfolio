@@ -17,9 +17,14 @@
       
       <section class="fade-up">
         <h1 style="font-size: 48px; margin-bottom: 16px; text-align: center;">My Work</h1>
-        <p style="text-align: center; color: var(--text-muted); margin-bottom: 60px; font-size: 18px;">
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 40px; font-size: 18px;">
           A comprehensive look at the projects and systems I've built.
         </p>
+
+        <!-- Category Filters -->
+        <div id="filter-container">
+          <!-- Populated by script.js -->
+        </div>
 
         <!-- Dynamic Container for fetchProjects() -->
         <div id="projects-container" class="projects-grid">
@@ -28,6 +33,9 @@
       </section>
 
     </div>
+
+    <!-- Reusable Footer Target -->
+    <div id="footer-target"></div>
   </div>
 
   <script src="script.js"></script>

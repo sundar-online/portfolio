@@ -1,30 +1,50 @@
 [
   {
     "title": "Electricity Consumption Predictor",
-    "description": "A high-fidelity ML dashboard comparing Linear Regression & Decision Trees for load forecasting. Features real-time metric tracking and automated model selection based on accuracy.",
-    "metrics": { "RMSE": "0.12", "MAE": "0.09", "R2": "0.98" },
-    "image": "data/electricity_predictor.png",
+    "description": "A high-fidelity ML dashboard built using JavaScript-based machine learning libraries, comparing Linear Regression and Decision Trees for load forecasting.",
+    "category": "ML",
+    "metrics": {
+      "RMSE": "0.12",
+      "MAE": "0.09",
+      "R2": "0.98"
+    },
+    "image": "data/project1.png",
     "link": "https://electricity-predictor.vercel.app/",
     "github_link": "https://github.com/sundar/electricity-predictor",
     "details_link": "#electricity-details",
-    "tags": ["Scikit-Learn", "Python", "MLOps"]
+    "tags": [
+      "JavaScript",
+      "TensorFlow.js",
+      "Chart.js"
+    ]
   },
   {
-    "title": "Focus Flow: Productivity Dashboard",
-    "description": "A modern focus tracking app designed to minimize distractions and maximize deep work sessions. Features a minimalist dark dashboard and real-time activity analytics.",
+    "title": "GoalForge – Discipline Builder",
+    "description": "A modern productivity web application designed to help users build discipline and maintain focus.",
+    "category": "Web",
     "image": "data/productivity_dashboard.png",
     "link": "https://goal-forge-iota.vercel.app/",
     "github_link": "https://github.com/sundar/focus-flow",
     "details_link": "#focus-details",
-    "tags": ["React", "Framer Motion", "D3.js"]
+    "tags": [
+      "React",
+      "Framer Motion",
+      "D3.js"
+    ]
   },
   {
-    "title": "Nexus E-Commerce Platform",
-    "description": "A next-generation e-commerce mobile application designed for high-end luxury brands, featuring seamless checkout flows, AR product previews, and minimalist aesthetics.",
-    "image": "data/ecommerce_app.png",
-    "link": "#",
-    "github_link": "https://github.com/sundar/nexus-ecommerce",
-    "details_link": "#nexus-details",
-    "tags": ["Mobile", "E-commerce", "Stripe"]
+    "title": "SpendSmart – Expense Tracker",
+    "description": "A modern expense tracking web application for managing daily spending.",
+    "category": "Full Stack",
+    "image": "data/project2.png",
+    "link": "https://spendsmarts.netlify.app/",
+    "github_link": "",
+    "details_link": "#expense-details",
+    "tags": [
+      "React",
+      "Vite",
+      "Supabase",
+      "Tailwind CSS"
+    ]
   }
 ]
