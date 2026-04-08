@@ -8,7 +8,7 @@
       "MAE": "0.09",
       "R2": "0.98"
     },
-    "image": "/data/electricity_predictor.png",
+    "image": "/public/data/electricity_predictor.png",
     "link": "https://electricity-predictor.vercel.app/",
     "github_link": "https://github.com/sundar/electricity-predictor",
     "details_link": "#electricity-details",
@@ -22,7 +22,7 @@
     "title": "GoalForge – Discipline Builder",
     "description": "A modern productivity web application designed to help users build discipline and maintain focus.",
     "category": "Web",
-    "image": "/data/project1.png",
+    "image": "/public/data/project1.png",
     "link": "https://goal-forge-iota.vercel.app/",
     "github_link": "https://github.com/sundar/focus-flow",
     "details_link": "#focus-details",
@@ -36,7 +36,7 @@
     "title": "SpendSmart – Expense Tracker",
     "description": "A modern expense tracking web application for managing daily spending.",
     "category": "Full Stack",
-    "image": "/data/project2.png",
+    "image": "/public/data/project2.png",
     "link": "https://spendsmarts.netlify.app/",
     "github_link": "",
     "details_link": "#expense-details",
@@ -46,5 +46,19 @@
       "Supabase",
       "Tailwind CSS"
     ]
-  }
+  },{
+  "title": "Face Recognition Attendance System",
+  "description": "An AI-powered attendance monitoring system using OpenCV and Python. It detects and recognizes faces in real-time, captures student images, trains face templates, and automatically marks attendance with timestamps.",
+  "image": "/public/data/project4.png",
+  "link": "#",
+  "github_link": "https://github.com/sundar/face-attendance",
+  "details_link": "#face-details",
+  "category": "DL",
+  "tags": [
+    "Python",
+    "OpenCV",
+    "Tkinter",
+    "Computer Vision"
+  ]
+}
 ]
