@@ -3,6 +3,9 @@ const TYPING_TEXTS = ["Data Scientist", "Full Stack Developer", "AI Builder"];
 let typingIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
+const ENABLE_CANVAS_ANIMATION =
+  !!document.body.dataset.hasAnimatedBg &&
+  !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ── REUSABLE NAVBAR COMPONENT ── */
 const NAVBAR_TEMPLATE = `
@@ -84,36 +87,36 @@ const FOOTER_TEMPLATE = `
 `;
 
 function initNavbar() {
-  const target = document.getElementById('navbar-target');
+  const target = document.getElementById("navbar-target");
   if (!target) return;
   target.innerHTML = NAVBAR_TEMPLATE;
   autoActivateNav();
 }
 
 function initFooter() {
-  const target = document.getElementById('footer-target');
+  const target = document.getElementById("footer-target");
   if (!target) return;
   target.innerHTML = FOOTER_TEMPLATE;
 }
 
 function autoActivateNav() {
   const path = window.location.pathname;
-  const page = path.split("/").pop() || 'index.html';
-  const navItems = document.querySelectorAll('.nav-item');
+  const page = path.split("/").pop() || "index.html";
+  const navItems = document.querySelectorAll(".nav-item");
 
-  navItems.forEach(item => item.classList.remove('active'));
+  navItems.forEach((item) => item.classList.remove("active"));
 
-  navItems.forEach(item => {
-    const href = item.getAttribute('href');
+  navItems.forEach((item) => {
+    const href = item.getAttribute("href");
     if (href === page) {
-      item.classList.add('active');
+      item.classList.add("active");
     }
   });
 }
 
 /* ── TYPING EFFECT ── */
 function typeEffect() {
-  const target = document.getElementById('typewriter');
+  const target = document.getElementById("typewriter");
   if (!target) return;
 
   const currentWord = TYPING_TEXTS[typingIndex];
@@ -147,15 +150,15 @@ function initScrollAnimations() {
   const observerOptions = {
     root: null,
     rootMargin: "0px",
-    threshold: 0.1
+    threshold: 0.1,
   };
 
   const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
+        entry.target.classList.add("visible");
 
-        if (entry.target.id === 'stats') {
+        if (entry.target.id === "stats") {
           startCounters();
         }
         obs.unobserve(entry.target);
@@ -163,18 +166,18 @@ function initScrollAnimations() {
     });
   }, observerOptions);
 
-  document.querySelectorAll('.fade-up:not(.visible)').forEach(el => {
+  document.querySelectorAll(".fade-up:not(.visible)").forEach((el) => {
     observer.observe(el);
   });
 }
 
 function startCounters() {
-  const counters = document.querySelectorAll('.counter');
+  const counters = document.querySelectorAll(".counter");
   const speed = 200;
 
-  counters.forEach(counter => {
+  counters.forEach((counter) => {
     const updateCount = () => {
-      const target = +counter.getAttribute('data-target');
+      const target = +counter.getAttribute("data-target");
       const count = +counter.innerText;
       const inc = target / speed;
 
@@ -191,19 +194,21 @@ function startCounters() {
 
 /* ── MAILTO LOGIC ── */
 function initContactForm() {
-  const form = document.getElementById('contactForm');
+  const form = document.getElementById("contactForm");
   if (!form) return;
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const message = document.getElementById('message').value;
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const message = document.getElementById("message").value;
 
     if (!name || !email || !message) return;
 
     const subject = encodeURIComponent(`New Portfolio Inquiry from ${name}`);
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+    const body = encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+    );
     window.location.href = `mailto:sundar@example.com?subject=${subject}&body=${body}`;
   });
 }
@@ -212,30 +217,24 @@ function initContactForm() {
 let allProjects = [];
 
 async function fetchProjects() {
-  const container = document.getElementById('projects-container');
+  const container = document.getElementById("projects-container");
   if (!container) return;
 
   try {
-    // BUG 2 FIX: Use absolute paths (leading slash) so they resolve correctly
-    // regardless of which page/directory is currently loaded.
-    let response = await fetch('/data/projects.json');
-    if (!response.ok && response.status === 404) {
-      response = await fetch('/public/data/projects.json'); // ← fixed: added leading /
-    }
-
+    const response = await fetch("data/projects.json");
     if (!response.ok) throw new Error("HTTP error " + response.status);
 
     allProjects = await response.json();
     renderProjects(allProjects);
     initFilters();
   } catch (error) {
-    console.error('Error fetching projects:', error);
+    console.error("Error fetching projects:", error);
     container.innerHTML = `<p style="text-align:center; color: var(--text-muted); grid-column: 1/-1;">Could not load dynamic projects.</p>`;
   }
 }
 
 function renderProjects(projects) {
-  const container = document.getElementById('projects-container');
+  const container = document.getElementById("projects-container");
   if (!container) return;
 
   if (projects.length === 0) {
@@ -243,35 +242,46 @@ function renderProjects(projects) {
     return;
   }
 
-  container.innerHTML = projects.map((p, index) => {
-    let imgSrc = p.image || '';
-    if (imgSrc && !imgSrc.startsWith('/') && !imgSrc.startsWith('http')) {
-      imgSrc = '/' + imgSrc;
-    }
+  container.innerHTML = projects
+    .map((p, index) => {
+      let imgSrc = p.image || "";
+      if (imgSrc && !imgSrc.startsWith("http")) {
+        imgSrc = imgSrc.replace(/^\/+/, "");
+      }
 
-    return `
-      <div class="glass-card fade-up project-card-tilt" style="transition-delay: ${index * 100}ms">
+      return `
+      <div class="glass-card fade-up project-card-tilt" style="transition-delay: ${
+        index * 100
+      }ms">
         <div class="project-img-container">
-          <img class="project-img" src="${imgSrc}" alt="${p.title}" loading="lazy"
+          <img class="project-img" src="${imgSrc}" alt="${
+        p.title
+      }" loading="lazy" decoding="async"
                onerror="this.style.display='none'">
         </div>
 
         <div class="project-info">
-          <div class="project-category-tag">${p.category || 'Project'}</div>
+          <div class="project-category-tag">${p.category || "Project"}</div>
           <h3>${p.title}</h3>
 
           <div class="badges">
-            ${(p.tags || []).map(tag => `<span class="badge">${tag}</span>`).join('')}
+            ${(p.tags || [])
+              .map((tag) => `<span class="badge">${tag}</span>`)
+              .join("")}
           </div>
 
           <p>${p.description}</p>
 
           <div class="card-actions">
-            <a href="${p.link || '#'}" target="_blank" class="btn btn-primary" style="padding: 10px 20px; font-size: 13px;">
+            <a href="${
+              p.link || "#"
+            }" target="_blank" class="btn btn-primary" style="padding: 10px 20px; font-size: 13px;">
               <i data-lucide="external-link" style="width: 16px; height: 16px;"></i>
               <span>Live Demo</span>
             </a>
-            <a href="${p.github_link || '#'}" target="_blank" class="btn btn-secondary" style="padding: 10px 20px; font-size: 13px;">
+            <a href="${
+              p.github_link || "#"
+            }" target="_blank" class="btn btn-secondary" style="padding: 10px 20px; font-size: 13px;">
               <i data-lucide="github" style="width: 16px; height: 16px;"></i>
               <span>Source</span>
             </a>
@@ -279,7 +289,8 @@ function renderProjects(projects) {
         </div>
       </div>
     `;
-  }).join('');
+    })
+    .join("");
 
   // Re-init Lucide Icons
   if (window.lucide) {
@@ -291,38 +302,53 @@ function renderProjects(projects) {
 
   // BUG 3 FIX: Create a fresh IntersectionObserver for newly rendered cards
   // instead of calling initScrollAnimations() which skips already-observed elements.
-  const obs = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { root: null, rootMargin: '0px', threshold: 0.1 });
+  const obs = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { root: null, rootMargin: "0px", threshold: 0.1 }
+  );
 
-  container.querySelectorAll('.fade-up:not(.visible)').forEach(el => obs.observe(el));
+  container
+    .querySelectorAll(".fade-up:not(.visible)")
+    .forEach((el) => obs.observe(el));
 }
 
 function initFilters() {
-  const filterContainer = document.getElementById('filter-container');
+  const filterContainer = document.getElementById("filter-container");
   if (!filterContainer) return;
 
-  const categories = ['All', ...new Set(allProjects.map(p => p.category).filter(Boolean))];
+  const categories = [
+    "All",
+    ...new Set(allProjects.map((p) => p.category).filter(Boolean)),
+  ];
 
-  filterContainer.innerHTML = categories.map(cat => `
-    <button class="filter-btn ${cat === 'All' ? 'active' : ''}" data-category="${cat}">${cat}</button>
-  `).join('');
+  filterContainer.innerHTML = categories
+    .map(
+      (cat) => `
+    <button class="filter-btn ${
+      cat === "All" ? "active" : ""
+    }" data-category="${cat}">${cat}</button>
+  `
+    )
+    .join("");
 
-  const buttons = filterContainer.querySelectorAll('.filter-btn');
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      buttons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+  const buttons = filterContainer.querySelectorAll(".filter-btn");
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      buttons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
 
-      const category = btn.getAttribute('data-category');
-      const filtered = category === 'All'
-        ? allProjects
-        : allProjects.filter(p => p.category === category);
+      const category = btn.getAttribute("data-category");
+      const filtered =
+        category === "All"
+          ? allProjects
+          : allProjects.filter((p) => p.category === category);
 
       renderProjects(filtered);
     });
@@ -330,13 +356,15 @@ function initFilters() {
 }
 
 /* ── DOM READY ── */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   initNavbar();
   initFooter();
   typeEffect();
   initScrollAnimations();
   initContactForm();
-  fetchProjects();
+  if (document.getElementById("projects-container")) {
+    fetchProjects();
+  }
 
   // Initialize Lucide Icons for static elements
   if (window.lucide) {
@@ -345,156 +373,285 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // BUG 4 FIX: Canvas init moved inside DOMContentLoaded so the <canvas id="bg">
   // element is guaranteed to exist before we query it.
-  const canvas = document.getElementById('bg');
-  if (canvas) {
-    const ctx = canvas.getContext('2d');
+  if (ENABLE_CANVAS_ANIMATION) {
+    const canvas = document.getElementById("bg");
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
 
-    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-    resize();
-    window.addEventListener('resize', resize);
-
-    const W = () => canvas.width;
-    const H = () => canvas.height;
-    function rand(a, b) { return Math.random() * (b - a) + a; }
-
-    class Puff {
-      constructor() { this.init(); this.age = rand(0, 3000); }
-      init() {
-        this.x = rand(-0.1, 1.1); this.y = rand(-0.1, 1.1);
-        this.rx = rand(0.10, 0.28); this.ry = rand(0.06, 0.16);
-        this.baseOpacity = rand(0.06, 0.18);
-        this.vx = rand(-0.00004, 0.00004); this.vy = rand(-0.00002, 0.00002);
-        this.rotation = rand(0, Math.PI * 2); this.rotSpeed = rand(-0.00015, 0.00015);
-        this.hue = 0; this.lightness = rand(20, 40);
-        this.pulseSpeed = rand(0.0015, 0.005); this.pulseOffset = rand(0, Math.PI * 2);
-        this.fadeSpeed = rand(0.0008, 0.002); this.fadeOffset = rand(0, Math.PI * 2);
-        this.morphSpeed = rand(0.0006, 0.0018); this.morphOffset = rand(0, Math.PI * 2);
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
       }
-      update(t) {
-        this.age++;
-        this.x += this.vx; this.y += this.vy; this.rotation += this.rotSpeed;
-        const morph = 0.85 + 0.15 * Math.sin(t * this.morphSpeed + this.morphOffset);
-        this._curRx = this.rx * morph; this._curRy = this.ry * (1 / morph);
-        const fade = 0.5 + 0.5 * Math.sin(t * this.fadeSpeed + this.fadeOffset);
-        const pulse = 0.7 + 0.3 * Math.sin(t * this.pulseSpeed + this.pulseOffset);
-        this._opacity = this.baseOpacity * fade * pulse;
-        if (this.x < -0.35 || this.x > 1.35 || this.y < -0.35 || this.y > 1.35) this.init();
+      resize();
+      window.addEventListener("resize", resize);
+
+      const W = () => canvas.width;
+      const H = () => canvas.height;
+      function rand(a, b) {
+        return Math.random() * (b - a) + a;
       }
-      draw() {
-        const cx = this.x * W(), cy = this.y * H();
-        const rx = this._curRx * W(), ry = this._curRy * H();
-        ctx.save(); ctx.translate(cx, cy); ctx.rotate(this.rotation);
-        const g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
-        const op = this._opacity;
-        g.addColorStop(0, `hsla(0,0%,${this.lightness}%,${op})`);
-        g.addColorStop(0.35, `hsla(0,0%,${this.lightness - 4}%,${op * 0.65})`);
-        g.addColorStop(0.7, `hsla(0,0%,${this.lightness - 8}%,${op * 0.25})`);
-        g.addColorStop(1, `hsla(0,0%,${this.lightness - 12}%,0)`);
-        ctx.scale(1, ry / rx); ctx.beginPath(); ctx.arc(0, 0, rx, 0, Math.PI * 2);
-        ctx.fillStyle = g; ctx.fill(); ctx.restore();
-      }
-    }
 
-    const puffs = Array.from({ length: 28 }, () => new Puff());
-
-    const stars = Array.from({ length: 200 }, () => {
-      const roll = Math.random();
-      let baseR = roll < 0.70 ? rand(0.25, 0.8) : roll < 0.90 ? rand(0.9, 1.7) : roll < 0.97 ? rand(1.8, 3.0) : rand(3.2, 4.8);
-      const isBig = baseR > 1.8;
-      return {
-        x: Math.random(), y: Math.random(), r: baseR, baseR, op: isBig ? rand(0.55, 0.95) : rand(0.15, 0.80),
-        twinkleSpeed: rand(0.003, isBig ? 0.01 : 0.02), twinkleOffset: rand(0, Math.PI * 2),
-        hue: 0, isBig, shrinkRate: rand(0.00008, 0.00018), minScale: 0.02, age: rand(0, 600)
-      };
-    });
-
-    function drawStars(t) {
-      stars.forEach(s => {
-        s.age++;
-        const scale = Math.max(s.minScale, 1 - s.shrinkRate * s.age);
-        s.r = s.baseR * scale;
-        if (scale <= s.minScale) s.age = 0;
-        const twinkle = 0.5 + 0.5 * Math.sin(t * s.twinkleSpeed + s.twinkleOffset);
-        const alpha = s.op * (s.isBig ? (0.55 + 0.45 * twinkle) : twinkle);
-        ctx.save(); ctx.globalAlpha = alpha;
-        if (s.isBig) {
-          const glow = ctx.createRadialGradient(s.x * W(), s.y * H(), 0, s.x * W(), s.y * H(), s.r * 5.5);
-          glow.addColorStop(0, `hsla(0,0%,90%,0.32)`); glow.addColorStop(1, 'rgba(0,0,0,0)');
-          ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(s.x * W(), s.y * H(), s.r * 5.5, 0, Math.PI * 2); ctx.fill();
+      class Puff {
+        constructor() {
+          this.init();
+          this.age = rand(0, 3000);
         }
-        ctx.fillStyle = `hsla(0, 0%, 100%, 0.8)`;
-        ctx.beginPath(); ctx.arc(s.x * W(), s.y * H(), Math.max(0.15, s.r), 0, Math.PI * 2); ctx.fill();
-        ctx.restore();
+        init() {
+          this.x = rand(-0.1, 1.1);
+          this.y = rand(-0.1, 1.1);
+          this.rx = rand(0.1, 0.28);
+          this.ry = rand(0.06, 0.16);
+          this.baseOpacity = rand(0.06, 0.18);
+          this.vx = rand(-0.00004, 0.00004);
+          this.vy = rand(-0.00002, 0.00002);
+          this.rotation = rand(0, Math.PI * 2);
+          this.rotSpeed = rand(-0.00015, 0.00015);
+          this.hue = 0;
+          this.lightness = rand(20, 40);
+          this.pulseSpeed = rand(0.0015, 0.005);
+          this.pulseOffset = rand(0, Math.PI * 2);
+          this.fadeSpeed = rand(0.0008, 0.002);
+          this.fadeOffset = rand(0, Math.PI * 2);
+          this.morphSpeed = rand(0.0006, 0.0018);
+          this.morphOffset = rand(0, Math.PI * 2);
+        }
+        update(t) {
+          this.age++;
+          this.x += this.vx;
+          this.y += this.vy;
+          this.rotation += this.rotSpeed;
+          const morph =
+            0.85 + 0.15 * Math.sin(t * this.morphSpeed + this.morphOffset);
+          this._curRx = this.rx * morph;
+          this._curRy = this.ry * (1 / morph);
+          const fade =
+            0.5 + 0.5 * Math.sin(t * this.fadeSpeed + this.fadeOffset);
+          const pulse =
+            0.7 + 0.3 * Math.sin(t * this.pulseSpeed + this.pulseOffset);
+          this._opacity = this.baseOpacity * fade * pulse;
+          if (
+            this.x < -0.35 ||
+            this.x > 1.35 ||
+            this.y < -0.35 ||
+            this.y > 1.35
+          )
+            this.init();
+        }
+        draw() {
+          const cx = this.x * W(),
+            cy = this.y * H();
+          const rx = this._curRx * W(),
+            ry = this._curRy * H();
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(this.rotation);
+          const g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
+          const op = this._opacity;
+          g.addColorStop(0, `hsla(0,0%,${this.lightness}%,${op})`);
+          g.addColorStop(
+            0.35,
+            `hsla(0,0%,${this.lightness - 4}%,${op * 0.65})`
+          );
+          g.addColorStop(0.7, `hsla(0,0%,${this.lightness - 8}%,${op * 0.25})`);
+          g.addColorStop(1, `hsla(0,0%,${this.lightness - 12}%,0)`);
+          ctx.scale(1, ry / rx);
+          ctx.beginPath();
+          ctx.arc(0, 0, rx, 0, Math.PI * 2);
+          ctx.fillStyle = g;
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      const puffs = Array.from({ length: 28 }, () => new Puff());
+
+      const stars = Array.from({ length: 200 }, () => {
+        const roll = Math.random();
+        let baseR =
+          roll < 0.7
+            ? rand(0.25, 0.8)
+            : roll < 0.9
+            ? rand(0.9, 1.7)
+            : roll < 0.97
+            ? rand(1.8, 3.0)
+            : rand(3.2, 4.8);
+        const isBig = baseR > 1.8;
+        return {
+          x: Math.random(),
+          y: Math.random(),
+          r: baseR,
+          baseR,
+          op: isBig ? rand(0.55, 0.95) : rand(0.15, 0.8),
+          twinkleSpeed: rand(0.003, isBig ? 0.01 : 0.02),
+          twinkleOffset: rand(0, Math.PI * 2),
+          hue: 0,
+          isBig,
+          shrinkRate: rand(0.00008, 0.00018),
+          minScale: 0.02,
+          age: rand(0, 600),
+        };
       });
-    }
 
-    function drawBase(t) {
-      const w = W(), h = H();
-      ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, w, h);
-      const shift = Math.sin(t * 0.0003) * 0.06;
-      const g1 = ctx.createRadialGradient(w * (0.32 + shift), h * 0.50, 0, w * (0.32 + shift), h * 0.50, w * 0.65);
-      g1.addColorStop(0, 'rgba(255,255,255,0.03)'); g1.addColorStop(0.5, 'rgba(255,255,255,0.01)'); g1.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = g1; ctx.fillRect(0, 0, w, h);
-      const g2 = ctx.createRadialGradient(w * (0.78 - shift), h * 0.40, 0, w * (0.78 - shift), h * 0.40, w * 0.48);
-      g2.addColorStop(0, 'rgba(255,255,255,0.02)'); g2.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = g2; ctx.fillRect(0, 0, w, h);
-      const breathe = 0.08 + 0.06 * Math.sin(t * 0.0008);
-      const g3 = ctx.createRadialGradient(w * 0.44, h * 0.44, 0, w * 0.44, h * 0.44, w * (0.22 + breathe));
-      g3.addColorStop(0, 'rgba(255,255,255,0.04)'); g3.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = g3; ctx.fillRect(0, 0, w, h);
-      const g4 = ctx.createRadialGradient(w * 0.62, h * 0.60, 0, w * 0.62, h * 0.60, w * 0.35);
-      g4.addColorStop(0, `rgba(255,255,255,${0.02 + 0.01 * Math.sin(t * 0.0005)})`);
-      g4.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = g4; ctx.fillRect(0, 0, w, h);
-    }
+      function drawStars(t) {
+        stars.forEach((s) => {
+          s.age++;
+          const scale = Math.max(s.minScale, 1 - s.shrinkRate * s.age);
+          s.r = s.baseR * scale;
+          if (scale <= s.minScale) s.age = 0;
+          const twinkle =
+            0.5 + 0.5 * Math.sin(t * s.twinkleSpeed + s.twinkleOffset);
+          const alpha = s.op * (s.isBig ? 0.55 + 0.45 * twinkle : twinkle);
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          if (s.isBig) {
+            const glow = ctx.createRadialGradient(
+              s.x * W(),
+              s.y * H(),
+              0,
+              s.x * W(),
+              s.y * H(),
+              s.r * 5.5
+            );
+            glow.addColorStop(0, `hsla(0,0%,90%,0.32)`);
+            glow.addColorStop(1, "rgba(0,0,0,0)");
+            ctx.fillStyle = glow;
+            ctx.beginPath();
+            ctx.arc(s.x * W(), s.y * H(), s.r * 5.5, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.fillStyle = `hsla(0, 0%, 100%, 0.8)`;
+          ctx.beginPath();
+          ctx.arc(s.x * W(), s.y * H(), Math.max(0.15, s.r), 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        });
+      }
 
-    let mouseX = 0.5, mouseY = 0.5, smoothMX = 0.5, smoothMY = 0.5;
-    window.addEventListener('mousemove', e => { mouseX = e.clientX / window.innerWidth; mouseY = e.clientY / window.innerHeight; });
+      function drawBase(t) {
+        const w = W(),
+          h = H();
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(0, 0, w, h);
+        const shift = Math.sin(t * 0.0003) * 0.06;
+        const g1 = ctx.createRadialGradient(
+          w * (0.32 + shift),
+          h * 0.5,
+          0,
+          w * (0.32 + shift),
+          h * 0.5,
+          w * 0.65
+        );
+        g1.addColorStop(0, "rgba(255,255,255,0.03)");
+        g1.addColorStop(0.5, "rgba(255,255,255,0.01)");
+        g1.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g1;
+        ctx.fillRect(0, 0, w, h);
+        const g2 = ctx.createRadialGradient(
+          w * (0.78 - shift),
+          h * 0.4,
+          0,
+          w * (0.78 - shift),
+          h * 0.4,
+          w * 0.48
+        );
+        g2.addColorStop(0, "rgba(255,255,255,0.02)");
+        g2.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g2;
+        ctx.fillRect(0, 0, w, h);
+        const breathe = 0.08 + 0.06 * Math.sin(t * 0.0008);
+        const g3 = ctx.createRadialGradient(
+          w * 0.44,
+          h * 0.44,
+          0,
+          w * 0.44,
+          h * 0.44,
+          w * (0.22 + breathe)
+        );
+        g3.addColorStop(0, "rgba(255,255,255,0.04)");
+        g3.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g3;
+        ctx.fillRect(0, 0, w, h);
+        const g4 = ctx.createRadialGradient(
+          w * 0.62,
+          h * 0.6,
+          0,
+          w * 0.62,
+          h * 0.6,
+          w * 0.35
+        );
+        g4.addColorStop(
+          0,
+          `rgba(255,255,255,${0.02 + 0.01 * Math.sin(t * 0.0005)})`
+        );
+        g4.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g4;
+        ctx.fillRect(0, 0, w, h);
+      }
 
-    function drawMouseGlow() {
-      smoothMX += (mouseX - smoothMX) * 0.04; smoothMY += (mouseY - smoothMY) * 0.04;
-      const w = W(), h = H(), cx = smoothMX * w, cy = smoothMY * h;
-      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, w * 0.30);
-      g.addColorStop(0, 'rgba(255,255,255,0.03)'); g.addColorStop(0.5, 'rgba(255,255,255,0.01)'); g.addColorStop(1, 'rgba(0,0,0,0)');
-      ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
-    }
+      let mouseX = 0.5,
+        mouseY = 0.5,
+        smoothMX = 0.5,
+        smoothMY = 0.5;
+      window.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX / window.innerWidth;
+        mouseY = e.clientY / window.innerHeight;
+      });
 
-    let t = 0;
-    function loop() {
-      t++;
-      drawBase(t);
-      puffs.forEach(p => { p.update(t); p.draw(); });
-      drawStars(t);
-      drawMouseGlow();
-      requestAnimationFrame(loop);
+      function drawMouseGlow() {
+        smoothMX += (mouseX - smoothMX) * 0.04;
+        smoothMY += (mouseY - smoothMY) * 0.04;
+        const w = W(),
+          h = H(),
+          cx = smoothMX * w,
+          cy = smoothMY * h;
+        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, w * 0.3);
+        g.addColorStop(0, "rgba(255,255,255,0.03)");
+        g.addColorStop(0.5, "rgba(255,255,255,0.01)");
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, w, h);
+      }
+
+      let t = 0;
+      function loop() {
+        t++;
+        drawBase(t);
+        puffs.forEach((p) => {
+          p.update(t);
+          p.draw();
+        });
+        drawStars(t);
+        drawMouseGlow();
+        requestAnimationFrame(loop);
+      }
+      loop();
     }
-    loop();
   }
 });
 
 /* ── TILT EFFECT ── */
 function initTilt() {
-  const cards = document.querySelectorAll('.project-card-tilt');
-  
-  cards.forEach(card => {
-    card.addEventListener('mousemove', (e) => {
+  const cards = document.querySelectorAll(".project-card-tilt");
+
+  cards.forEach((card) => {
+    card.addEventListener("mousemove", (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      
+
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      
+
       const rotateX = ((y - centerY) / centerY) * -10; // Max 10 degrees
-      const rotateY = ((x - centerX) / centerX) * 10;  // Max 10 degrees
-      
-      card.style.setProperty('--rotateX', `${rotateX}deg`);
-      card.style.setProperty('--rotateY', `${rotateY}deg`);
+      const rotateY = ((x - centerX) / centerX) * 10; // Max 10 degrees
+
+      card.style.setProperty("--rotateX", `${rotateX}deg`);
+      card.style.setProperty("--rotateY", `${rotateY}deg`);
     });
-    
-    card.addEventListener('mouseleave', () => {
-      card.style.setProperty('--rotateX', `0deg`);
-      card.style.setProperty('--rotateY', `0deg`);
+
+    card.addEventListener("mouseleave", () => {
+      card.style.setProperty("--rotateX", `0deg`);
+      card.style.setProperty("--rotateY", `0deg`);
     });
   });
-}
+}

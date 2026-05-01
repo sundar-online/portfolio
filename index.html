@@ -1,194 +1,351 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sundaramoorthy | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600&family=DM+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sundaramoorthy | Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600&family=DM+Sans:wght@400;500;700&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://unpkg.com/lucide@latest"></script>
-</head>
+  <body data-has-animated-bg="true">
+    <!-- Global Canvas Background -->
+    <canvas id="bg"></canvas>
 
-<body>
-  <!-- Global Canvas Background -->
-  <canvas id="bg"></canvas>
+    <div class="page">
+      <!-- Navbar injected here by script.js -->
+      <div id="navbar-target"></div>
 
-  <div class="page">
-    <!-- Navbar injected here by script.js -->
-    <div id="navbar-target"></div>
-
-    <div class="container">
-
-      <!-- HERO SECTION -->
-      <section class="hero fade-up" id="hero">
-        <h1>Sundaramoorthy</h1>
-        <div class="type-wrap">
-          <span id="typewriter" class="typing-text"></span>
-        </div>
-        <p class="tagline">I build intelligent systems that solve real-world problems</p>
-        <div class="hero-btns">
-          <a href="work.html" class="btn btn-primary">View Work
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </a>
-          <a href="contact.html" class="btn btn-secondary">Contact Me</a>
-        </div>
-      </section>
-
-      <!-- PROGRAMMING LANGUAGES & TOOLS -->
-      <section id="tech-stack" class="fade-up">
-        <h2 class="section-title" style="margin-bottom: 8px;">Programming Languages & Tools</h2>
-        <p style="text-align: center; color: var(--text-muted); margin-bottom: 40px; font-size: 16px;">
-          Technologies I use to build scalable and intelligent applications
-        </p>
-
-        <div class="projects-grid">
-
-          <!-- Category 1: Languages -->
-          <div class="glass-card" style="padding: 32px;">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
-              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-              </svg>
-              <h3 style="font-size: 20px;">Programming Languages</h3>
-            </div>
-            <div class="tech-icon-grid">
-              <div class="tech-icon" title="Python"><img src="icons/python.png" alt="Python"></div>
-              <div class="tech-icon" title="Java"><img src="icons/java.png" alt="Java"></div>
-              <div class="tech-icon" title="C"><img src="icons/c.png" alt="C"></div>
-              <div class="tech-icon" title="C++"><img src="icons/c++.png" alt="C++"></div>
-              <div class="tech-icon" title="R"><img src="icons/R.png" alt="R"></div>
-            </div>
+      <div class="container">
+        <!-- HERO SECTION -->
+        <section class="hero fade-up" id="hero">
+          <h1>Sundaramoorthy</h1>
+          <div class="type-wrap">
+            <span id="typewriter" class="typing-text"></span>
           </div>
-
-          <!-- Category 2: Web Technologies -->
-          <div class="glass-card" style="padding: 32px;">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
-              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                <line x1="3" y1="9" x2="21" y2="9" />
-                <line x1="9" y1="21" x2="9" y2="9" />
+          <p class="tagline">
+            I build intelligent systems that solve real-world problems
+          </p>
+          <div class="hero-btns">
+            <a href="work.html" class="btn btn-primary"
+              >View Work
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
-              <h3 style="font-size: 20px;">Web Technologies</h3>
-            </div>
-            <div class="tech-icon-grid">
-              <div class="tech-icon" title="HTML"><img src="icons/html.png" alt="HTML"></div>
-              <div class="tech-icon" title="CSS"><img src="icons/css-3.png" alt="CSS"></div>
-              <div class="tech-icon" title="JavaScript"><img src="icons/java-script.png" alt="JavaScript"></div>
-              <div class="tech-icon" title="React"><img src="icons/atom.png" alt="React" title="React"></div>
-              <div class="tech-icon" title="Next.js"><img src="icons/Next.js.png" alt="Next.js"></div>
-              <div class="tech-icon" title="Node.js"><img src="icons/Node.js.png" alt="Node.js"></div>
-            </div>
+            </a>
+            <a href="contact.html" class="btn btn-secondary">Contact Me</a>
           </div>
+        </section>
 
-          <!-- Category 3: Tools & Platforms -->
-          <div class="glass-card" style="padding: 32px;">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
-              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-                <line x1="8" y1="21" x2="16" y2="21" />
-                <line x1="12" y1="17" x2="12" y2="21" />
-              </svg>
-              <h3 style="font-size: 20px;">Tools & Platforms</h3>
-            </div>
-            <div class="tech-icon-grid">
-              <div class="tech-icon" title="Git"><img src="icons/Git.png" alt="Git"></div>
-              <div class="tech-icon" title="Docker"><img src="icons/Docker.png" alt="Docker"></div>
-              <div class="tech-icon" title="Google Cloud Platform"><img src="icons/Google Cloud.png" alt="GCP"></div>
-              <div class="tech-icon" title="MySQL"><img src="icons/MySQL.png" alt="MySQL"></div>
-              <div class="tech-icon" title="Supabase"><svg viewBox="0 0 24 24" width="24" height="24" fill="#3ECF8E">
+        <!-- PROGRAMMING LANGUAGES & TOOLS -->
+        <section id="tech-stack" class="fade-up">
+          <h2 class="section-title" style="margin-bottom: 8px">
+            Programming Languages & Tools
+          </h2>
+          <p
+            style="
+              text-align: center;
+              color: var(--text-muted);
+              margin-bottom: 40px;
+              font-size: 16px;
+            "
+          >
+            Technologies I use to build scalable and intelligent applications
+          </p>
+
+          <div class="projects-grid">
+            <!-- Category 1: Languages -->
+            <div class="glass-card" style="padding: 32px">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  margin-bottom: 24px;
+                "
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
                   <path
-                    d="M21.36 8.53l-8.48-4.9a2.29 2.29 0 0 0-2.3 0L2.1 8.53A2.3 2.3 0 0 0 1 10.5v5a2.3 2.3 0 0 0 1.1 2l8.48 4.9a2.29 2.29 0 0 0 2.3 0l8.48-4.9A2.3 2.3 0 0 0 22.46 15.5v-5a2.3 2.3 0 0 0-1.1-1.97z" />
-                </svg></div>
-              <div class="tech-icon" title="MongoDB"><img src="icons/MongoDB.png" alt="MongoDB"></div>
+                    d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                  />
+                </svg>
+                <h3 style="font-size: 20px">Programming Languages</h3>
+              </div>
+              <div class="tech-icon-grid">
+                <div class="tech-icon" title="Python">
+                  <img src="icons/python.png" alt="Python" />
+                </div>
+                <div class="tech-icon" title="Java">
+                  <img src="icons/java.png" alt="Java" />
+                </div>
+                <div class="tech-icon" title="C">
+                  <img src="icons/c.png" alt="C" />
+                </div>
+                <div class="tech-icon" title="C++">
+                  <img src="icons/c++.png" alt="C++" />
+                </div>
+                <div class="tech-icon" title="R">
+                  <img src="icons/R.png" alt="R" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Category 2: Web Technologies -->
+            <div class="glass-card" style="padding: 32px">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  margin-bottom: 24px;
+                "
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                  <line x1="3" y1="9" x2="21" y2="9" />
+                  <line x1="9" y1="21" x2="9" y2="9" />
+                </svg>
+                <h3 style="font-size: 20px">Web Technologies</h3>
+              </div>
+              <div class="tech-icon-grid">
+                <div class="tech-icon" title="HTML">
+                  <img src="icons/html.png" alt="HTML" />
+                </div>
+                <div class="tech-icon" title="CSS">
+                  <img src="icons/css-3.png" alt="CSS" />
+                </div>
+                <div class="tech-icon" title="JavaScript">
+                  <img src="icons/java-script.png" alt="JavaScript" />
+                </div>
+                <div class="tech-icon" title="React">
+                  <img src="icons/atom.png" alt="React" title="React" />
+                </div>
+                <div class="tech-icon" title="Next.js">
+                  <img src="icons/Next.js.png" alt="Next.js" />
+                </div>
+                <div class="tech-icon" title="Node.js">
+                  <img src="icons/Node.js.png" alt="Node.js" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Category 3: Tools & Platforms -->
+            <div class="glass-card" style="padding: 32px">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  margin-bottom: 24px;
+                "
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                  <line x1="8" y1="21" x2="16" y2="21" />
+                  <line x1="12" y1="17" x2="12" y2="21" />
+                </svg>
+                <h3 style="font-size: 20px">Tools & Platforms</h3>
+              </div>
+              <div class="tech-icon-grid">
+                <div class="tech-icon" title="Git">
+                  <img src="icons/Git.png" alt="Git" />
+                </div>
+                <div class="tech-icon" title="Docker">
+                  <img src="icons/Docker.png" alt="Docker" />
+                </div>
+                <div class="tech-icon" title="Google Cloud Platform">
+                  <img src="icons/Google Cloud.png" alt="GCP" />
+                </div>
+                <div class="tech-icon" title="MySQL">
+                  <img src="icons/MySQL.png" alt="MySQL" />
+                </div>
+                <div class="tech-icon" title="Supabase">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="#3ECF8E"
+                  >
+                    <path
+                      d="M21.36 8.53l-8.48-4.9a2.29 2.29 0 0 0-2.3 0L2.1 8.53A2.3 2.3 0 0 0 1 10.5v5a2.3 2.3 0 0 0 1.1 2l8.48 4.9a2.29 2.29 0 0 0 2.3 0l8.48-4.9A2.3 2.3 0 0 0 22.46 15.5v-5a2.3 2.3 0 0 0-1.1-1.97z"
+                    />
+                  </svg>
+                </div>
+                <div class="tech-icon" title="MongoDB">
+                  <img src="icons/MongoDB.png" alt="MongoDB" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Category 4: AI & Machine Learning -->
+            <div class="glass-card" style="padding: 32px">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 12px;
+                  margin-bottom: 24px;
+                "
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="16" x2="12" y2="12" />
+                  <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+                <h3 style="font-size: 20px">AI & Machine Learning</h3>
+              </div>
+              <div class="tech-icon-grid">
+                <div class="tech-icon" title="Machine Learning">
+                  <img
+                    src="icons/Machine Learning.png"
+                    alt="Machine Learning"
+                    title="Machine Learning"
+                  />
+                </div>
+                <div class="tech-icon" title="Deep Learning">
+                  <img
+                    src="icons/deep-learning.png"
+                    alt="Deep Learning"
+                    title="Deep Learning"
+                  />
+                </div>
+                <div class="tech-icon" title="NLP">
+                  <img src="icons/nlp.png" alt="NLP" title="NLP" />
+                </div>
+                <div class="tech-icon" title="Scikit-learn">
+                  <img
+                    src="icons/Scikit-learn.png"
+                    alt="Scikit-learn"
+                    title="Scikit-learn"
+                  />
+                </div>
+                <div class="tech-icon" title="Pandas">
+                  <img src="icons/Pandas.png" alt="Pandas" title="Pandas" />
+                </div>
+                <div class="tech-icon" title="NumPy">
+                  <img src="icons/NumPy.png" alt="NumPy" title="NumPy" />
+                </div>
+                <div class="tech-icon" title="OpenCV">
+                  <img src="icons/OpenCV.png" alt="OpenCV" title="OpenCV" />
+                </div>
+              </div>
             </div>
           </div>
+        </section>
 
-          <!-- Category 4: AI & Machine Learning -->
-          <div class="glass-card" style="padding: 32px;">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
-              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="16" x2="12" y2="12" />
-                <line x1="12" y1="8" x2="12.01" y2="8" />
+        <!-- STATS SECTION -->
+        <section id="stats" class="fade-up">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <h4 data-target="24" class="counter">0</h4>
+              <p>Projects Completed</p>
+            </div>
+            <div class="stat-item">
+              <h4 data-target="15" class="counter">0</h4>
+              <p>Technologies Used</p>
+            </div>
+            <div class="stat-item">
+              <h4><span data-target="3" class="counter">0</span>+</h4>
+              <p>Years Experience</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ABOUT PREVIEW -->
+        <section id="about-preview" class="fade-up">
+          <div class="glass-card preview-card">
+            <h2>Who am I?</h2>
+            <p>
+              I combine analytical prowess from Data Science with the robust
+              architecture of Full Stack engineering to deliver intelligent,
+              end-to-end applications that drive real impact.
+            </p>
+            <a href="about.html" class="btn btn-secondary">Read My Story</a>
+          </div>
+        </section>
+
+        <!-- CONTACT CTA -->
+        <section id="contact-cta" class="fade-up">
+          <div
+            class="glass-card cta-card"
+            style="border-color: rgba(255, 255, 255, 0.2)"
+          >
+            <h2>Have an idea?<br />Let's turn it into reality 🚀</h2>
+            <p>
+              Whether you're looking for an AI integration or a robust web
+              application, I'm ready to help you build the future.
+            </p>
+            <a
+              href="contact.html"
+              class="btn btn-primary"
+              style="padding: 16px 32px; font-size: 16px"
+            >
+              Start a Conversation
+              <svg
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="22" y1="2" x2="11" y2="13" />
+                <polygon points="22 2 15 22 11 13 2 9 22 2" />
               </svg>
-              <h3 style="font-size: 20px;">AI & Machine Learning</h3>
-            </div>
-            <div class="tech-icon-grid">
-              <div class="tech-icon" title="Machine Learning"><img src="icons/Machine Learning.png"
-                  alt="Machine Learning" title="Machine Learning"></div>
-              <div class="tech-icon" title="Deep Learning"><img src="icons/deep-learning.png" alt="Deep Learning"
-                  title="Deep Learning"></div>
-              <div class="tech-icon" title="NLP"><img src="icons/nlp.png" alt="NLP" title="NLP"></div>
-              <div class="tech-icon" title="Scikit-learn"><img src="icons/Scikit-learn.png" alt="Scikit-learn"
-                  title="Scikit-learn"></div>
-              <div class="tech-icon" title="Pandas"><img src="icons/Pandas.png" alt="Pandas" title="Pandas"></div>
-              <div class="tech-icon" title="NumPy"><img src="icons/NumPy.png" alt="NumPy" title="NumPy"></div>
-              <div class="tech-icon" title="OpenCV"><img src="icons/OpenCV.png" alt="OpenCV" title="OpenCV"></div>
-            </div>
+            </a>
           </div>
+        </section>
+      </div>
 
-        </div>
-      </section>
-
-
-
-      <!-- STATS SECTION -->
-      <section id="stats" class="fade-up">
-        <div class="stats-grid">
-          <div class="stat-item">
-            <h4 data-target="24" class="counter">0</h4>
-            <p>Projects Completed</p>
-          </div>
-          <div class="stat-item">
-            <h4 data-target="15" class="counter">0</h4>
-            <p>Technologies Used</p>
-          </div>
-          <div class="stat-item">
-            <h4><span data-target="3" class="counter">0</span>+</h4>
-            <p>Years Experience</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- ABOUT PREVIEW -->
-      <section id="about-preview" class="fade-up">
-        <div class="glass-card preview-card">
-          <h2>Who am I?</h2>
-          <p>I combine analytical prowess from Data Science with the robust architecture of Full Stack engineering to
-            deliver intelligent, end-to-end applications that drive real impact.</p>
-          <a href="about.html" class="btn btn-secondary">Read My Story</a>
-        </div>
-      </section>
-
-      <!-- CONTACT CTA -->
-      <section id="contact-cta" class="fade-up">
-        <div class="glass-card cta-card" style="border-color: rgba(255,255,255,0.2);">
-          <h2>Have an idea?<br>Let's turn it into reality 🚀</h2>
-          <p>Whether you're looking for an AI integration or a robust web application, I'm ready to help you build the
-            future.</p>
-          <a href="contact.html" class="btn btn-primary" style="padding: 16px 32px; font-size: 16px;">
-            Start a Conversation
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13" />
-              <polygon points="22 2 15 22 11 13 2 9 22 2" />
-            </svg>
-          </a>
-        </div>
-      </section>
-
+      <!-- Reusable Footer Target -->
+      <div id="footer-target"></div>
     </div>
 
-    <!-- Reusable Footer Target -->
-    <div id="footer-target"></div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-
+    <script type="module" src="script.js" defer></script>
+  </body>
 </html>

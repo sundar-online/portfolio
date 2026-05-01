@@ -8,7 +8,7 @@
       "MAE": "0.09",
       "R2": "0.98"
     },
-    "image": "/public/data/electricity_predictor.png",
+    "image": "data/electricity_predictor.png",
     "link": "https://electricity-predictor.vercel.app/",
     "github_link": "https://github.com/sundar/electricity-predictor",
     "details_link": "#electricity-details",
@@ -18,7 +18,7 @@
     "title": "GoalForge – Discipline Builder",
     "description": "A modern productivity web application designed to help users build discipline and maintain focus.",
     "category": "Web",
-    "image": "/public/data/project1.png",
+    "image": "data/project1.png",
     "link": "https://goal-forge-two.vercel.app/",
     "github_link": "https://github.com/sundar/focus-flow",
     "details_link": "#focus-details",
@@ -28,7 +28,7 @@
     "title": "SpendSmart – Expense Tracker",
     "description": "A modern expense tracking web application for managing daily spending.",
     "category": "Full Stack",
-    "image": "/public/data/project2.png",
+    "image": "data/project2.png",
     "link": "https://spendsmarts.netlify.app/",
     "github_link": "",
     "details_link": "#expense-details",
@@ -37,7 +37,7 @@
   {
     "title": "Face Recognition Attendance System",
     "description": "An AI-powered attendance monitoring system using OpenCV and Python. It detects and recognizes faces in real-time, captures student images, trains face templates, and automatically marks attendance with timestamps.",
-    "image": "/public/data/project4.png",
+    "image": "data/project4.png",
     "link": "#",
     "github_link": "https://github.com/sundar/face-attendance",
     "details_link": "#face-details",
@@ -47,7 +47,7 @@
   {
     "title": "XO Game – Tic Tac Toe",
     "description": "An interactive Tic Tac Toe game built using HTML, CSS, and JavaScript with a clean UI and smooth gameplay experience.",
-    "image": "/public/data/project5.png",
+    "image": "data/project5.png",
     "link": "https://sundar-online.github.io/XO-Game/",
     "github_link": "https://github.com/sundar-online/XO-Game",
     "details_link": "#xo-details",
@@ -57,7 +57,7 @@
   {
     "title": "Video Frame Extractor Web App",
     "description": "A frontend-only web application that allows users to upload a video, extract frames using HTML5 Canvas, preview them in a responsive gallery, and download all frames as a ZIP file with smooth UI and real-time progress.",
-    "image": "/public/data/video.png",
+    "image": "data/Video.png",
     "link": "https://cubosapiens.world/tools/vid-framer",
     "github_link": "https://github.com/rk192324217/cubosapiens_video_framer",
     "details_link": "#video-frame-details",

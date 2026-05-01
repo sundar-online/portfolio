@@ -1,44 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sundaramoorthy | Work</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-<body>
-  <canvas id="bg"></canvas>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sundaramoorthy | Work</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600&family=DM+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+  </head>
+  <body data-has-animated-bg="true">
+    <canvas id="bg"></canvas>
 
-  <div class="page">
-    <div id="navbar-target"></div>
+    <div class="page">
+      <div id="navbar-target"></div>
 
-    <div class="container" style="padding-top: 100px; padding-bottom: 80px;">
-      
-      <section class="fade-up">
-        <h1 style="font-size: 48px; margin-bottom: 16px; text-align: center;">My Work</h1>
-        <p style="text-align: center; color: var(--text-muted); margin-bottom: 40px; font-size: 18px;">
-          A comprehensive look at the projects and systems I've built.
-        </p>
+      <div class="container" style="padding-top: 100px; padding-bottom: 80px">
+        <section class="fade-up">
+          <h1 style="font-size: 48px; margin-bottom: 16px; text-align: center">
+            My Work
+          </h1>
+          <p
+            style="
+              text-align: center;
+              color: var(--text-muted);
+              margin-bottom: 40px;
+              font-size: 18px;
+            "
+          >
+            A comprehensive look at the projects and systems I've built.
+          </p>
 
-        <!-- Category Filters -->
-        <div id="filter-container">
-          <!-- Populated by script.js -->
-        </div>
+          <!-- Category Filters -->
+          <div id="filter-container">
+            <!-- Populated by script.js -->
+          </div>
 
-        <!-- Dynamic Container for fetchProjects() -->
-        <div id="projects-container" class="projects-grid">
-          <!-- Populated by script.js -->
-        </div>
-      </section>
+          <!-- Dynamic Container for fetchProjects() -->
+          <div id="projects-container" class="projects-grid">
+            <!-- Populated by script.js -->
+          </div>
+        </section>
+      </div>
 
+      <!-- Reusable Footer Target -->
+      <div id="footer-target"></div>
     </div>
 
-    <!-- Reusable Footer Target -->
-    <div id="footer-target"></div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
+    <script type="module" src="script.js" defer></script>
+  </body>
 </html>

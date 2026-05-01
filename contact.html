@@ -1,56 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sundaramoorthy | Contact</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://unpkg.com/lucide@latest"></script>
-</head>
-<body>
-  <canvas id="bg"></canvas>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sundaramoorthy | Contact</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600&family=DM+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+  </head>
+  <body>
+    <canvas id="bg"></canvas>
 
-  <div class="page">
-    <div id="navbar-target"></div>
+    <div class="page">
+      <div id="navbar-target"></div>
 
-    <div class="container" style="padding-top: 120px; padding-bottom: 80px;">
-      
-      <section class="fade-up">
-        <div class="glass-card contact-form-wrap">
-          <h1 style="font-size: 36px; margin-bottom: 12px; text-align: center;">Get in Touch</h1>
-          <p style="text-align: center; color: var(--text-muted); margin-bottom: 32px;">
-            Let me know how I can help you build your next intelligent system.
-          </p>
+      <div class="container" style="padding-top: 120px; padding-bottom: 80px">
+        <section class="fade-up">
+          <div class="glass-card contact-form-wrap">
+            <h1
+              style="font-size: 36px; margin-bottom: 12px; text-align: center"
+            >
+              Get in Touch
+            </h1>
+            <p
+              style="
+                text-align: center;
+                color: var(--text-muted);
+                margin-bottom: 32px;
+              "
+            >
+              Let me know how I can help you build your next intelligent system.
+            </p>
 
-          <form id="contactForm">
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" id="name" name="name" placeholder="John Doe" required />
-            </div>
+            <form id="contactForm">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="John Doe"
+                  required
+                />
+              </div>
 
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" placeholder="john@example.com" required />
-            </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="john@example.com"
+                  required
+                />
+              </div>
 
-            <div class="form-group">
-              <label for="message">Message</label>
-              <textarea id="message" name="message" placeholder="Tell me about your project..." required></textarea>
-            </div>
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  placeholder="Tell me about your project..."
+                  required
+                ></textarea>
+              </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 12px; padding: 16px; font-size: 16px;">
-              Send Message
-            </button>
-          </form>
-        </div>
-      </section>
-
+              <button
+                type="submit"
+                class="btn btn-primary"
+                style="
+                  width: 100%;
+                  border-radius: 12px;
+                  padding: 16px;
+                  font-size: 16px;
+                "
+              >
+                Send Message
+              </button>
+            </form>
+          </div>
+        </section>
+      </div>
+      <!-- Reusable Footer Target -->
+      <div id="footer-target"></div>
     </div>
-    <!-- Reusable Footer Target -->
-    <div id="footer-target"></div>
-  </div>
 
-  <script src="script.js"></script>
-</body>
+    <script type="module" src="script.js" defer></script>
+  </body>
 </html>
