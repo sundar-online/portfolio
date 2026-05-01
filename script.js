@@ -244,17 +244,13 @@ function renderProjects(projects) {
   }
 
   container.innerHTML = projects.map((p, index) => {
-    // BUG 1 FIX: Normalise image path so it always resolves from the site root.
-    // Your JSON uses paths like "data/project1.png" which are relative and break
-    // on any page that isn't at the root. Prepend a leading slash to make them
-    // absolute (/data/project1.png) so they work on every page.
     let imgSrc = p.image || '';
     if (imgSrc && !imgSrc.startsWith('/') && !imgSrc.startsWith('http')) {
-      imgSrc = '/' + imgSrc;   // "data/x.png"  →  "/data/x.png"
+      imgSrc = '/' + imgSrc;
     }
 
     return `
-      <div class="glass-card fade-up" style="transition-delay: ${index * 100}ms">
+      <div class="glass-card fade-up project-card-tilt" style="transition-delay: ${index * 100}ms">
         <div class="project-img-container">
           <img class="project-img" src="${imgSrc}" alt="${p.title}" loading="lazy"
                onerror="this.style.display='none'">
@@ -271,13 +267,27 @@ function renderProjects(projects) {
           <p>${p.description}</p>
 
           <div class="card-actions">
-            <a href="${p.link || '#'}" class="btn btn-primary" style="padding: 8px 16px; font-size: 13px;">Live Demo</a>
-            <a href="${p.github_link || '#'}" class="btn btn-secondary" style="padding: 8px 16px; font-size: 13px;">GitHub</a>
+            <a href="${p.link || '#'}" target="_blank" class="btn btn-primary" style="padding: 10px 20px; font-size: 13px;">
+              <i data-lucide="external-link" style="width: 16px; height: 16px;"></i>
+              <span>Live Demo</span>
+            </a>
+            <a href="${p.github_link || '#'}" target="_blank" class="btn btn-secondary" style="padding: 10px 20px; font-size: 13px;">
+              <i data-lucide="github" style="width: 16px; height: 16px;"></i>
+              <span>Source</span>
+            </a>
           </div>
         </div>
       </div>
     `;
   }).join('');
+
+  // Re-init Lucide Icons
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+
+  // Init Tilt Effect
+  initTilt();
 
   // BUG 3 FIX: Create a fresh IntersectionObserver for newly rendered cards
   // instead of calling initScrollAnimations() which skips already-observed elements.
@@ -327,6 +337,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollAnimations();
   initContactForm();
   fetchProjects();
+
+  // Initialize Lucide Icons for static elements
+  if (window.lucide) {
+    lucide.createIcons();
+  }
 
   // BUG 4 FIX: Canvas init moved inside DOMContentLoaded so the <canvas id="bg">
   // element is guaranteed to exist before we query it.
@@ -456,3 +471,30 @@ document.addEventListener('DOMContentLoaded', () => {
     loop();
   }
 });
+
+/* ── TILT EFFECT ── */
+function initTilt() {
+  const cards = document.querySelectorAll('.project-card-tilt');
+  
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -10; // Max 10 degrees
+      const rotateY = ((x - centerX) / centerX) * 10;  // Max 10 degrees
+      
+      card.style.setProperty('--rotateX', `${rotateX}deg`);
+      card.style.setProperty('--rotateY', `${rotateY}deg`);
+    });
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.setProperty('--rotateX', `0deg`);
+      card.style.setProperty('--rotateY', `0deg`);
+    });
+  });
+}
