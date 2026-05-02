@@ -220,11 +220,39 @@ async function fetchProjects() {
   const container = document.getElementById("projects-container");
   if (!container) return;
 
+  const paths = ["data/projects.json", "public/data/projects.json"];
+  let response;
+  let usedPath = "";
+
+  for (const path of paths) {
+    try {
+      const res = await fetch(path);
+      if (res.ok) {
+        response = res;
+        usedPath = path;
+        break;
+      }
+    } catch (e) {
+      // Continue to next path
+    }
+  }
+
   try {
-    const response = await fetch("data/projects.json");
-    if (!response.ok) throw new Error("HTTP error " + response.status);
+    if (!response || !response.ok) throw new Error("Could not find projects.json");
 
     allProjects = await response.json();
+    
+    // If we had to use the 'public/' prefix, we should also use it for images
+    const pathPrefix = usedPath.startsWith("public/") ? "public/" : "";
+    if (pathPrefix) {
+      allProjects = allProjects.map(p => ({
+        ...p,
+        image: p.image && !p.image.startsWith("http") && !p.image.startsWith("public/") 
+          ? pathPrefix + p.image 
+          : p.image
+      }));
+    }
+
     renderProjects(allProjects);
     initFilters();
   } catch (error) {
