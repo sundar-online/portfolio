@@ -101,7 +101,8 @@ function initFooter() {
 
 function autoActivateNav() {
   const path = window.location.pathname;
-  const page = path.split("/").pop() || "index.html";
+  let page = path.split("/").pop() || "index.html";
+  if (!page.endsWith(".html")) page += ".html";
   const navItems = document.querySelectorAll(".nav-item");
 
   navItems.forEach((item) => item.classList.remove("active"));
