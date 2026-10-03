@@ -63,5 +63,15 @@
     "details_link": "#video-frame-details",
     "category": "Web",
     "tags": ["React", "JavaScript", "HTML5", "Canvas API", "JSZip", "CSS"]
-  }
+  },
+  {
+  "title": "Web Templates",
+  "description": "A curated collection of modern, responsive website templates built with HTML, CSS, and JavaScript.",
+  "category": "Web Design",
+  "image": "data/web_templates.png",
+  "link": "https://sundar-online.github.io/Web-Templates/",
+  "github_link": "https://github.com/sundar-online/Web-Templates",
+  "details_link": "#web-templates-details",
+  "tags": ["HTML", "CSS", "JavaScript", "Responsive"]
+}
 ]

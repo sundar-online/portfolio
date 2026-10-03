@@ -1,4 +1,24 @@
 /* ── CONFIG ── */
+const neuralConfig = {
+  background: "#08090B",
+  nodeColor: "#FFFFFF",
+  lineColor: "#7DD3FC",
+  glowColor: "#60A5FA",
+  nodeCount: 70,
+  connectionDistance: 150,
+  lineOpacity: 0.15,
+  animationSpeed: 0.15
+};
+
+const SOCIAL_LINKS = {
+  instagram: "https://www.instagram.com/sundar.matrix?stkn=MTJzMjQyZjgzZjB0ZA==",
+  facebook: "https://www.facebook.com/share/1GFmyZ4AmK/",
+  x: "https://x.com/sundar_datasci",
+  linkedin: "https://www.linkedin.com/in/sundaramoorthys23?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+  github: "https://github.com/Sundaramoorthy-G",
+  leetcode: "https://leetcode.com/u/Sundar1207/",
+};
+
 const TYPING_TEXTS = ["Data Scientist", "Full Stack Developer", "AI Builder"];
 let typingIndex = 0;
 let charIndex = 0;
@@ -7,16 +27,56 @@ const ENABLE_CANVAS_ANIMATION =
   !!document.body.dataset.hasAnimatedBg &&
   !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/* ── THEME MANAGEMENT ── */
+function getActiveTheme() {
+  return document.documentElement.getAttribute("data-theme") || "dark";
+}
+
+function setTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("theme", theme);
+  updateThemeToggle(theme);
+}
+
+function toggleTheme() {
+  const current = getActiveTheme();
+  const next = current === "light" ? "dark" : "light";
+  setTheme(next);
+}
+
+function updateThemeToggle(theme) {
+  const toggleBtn = document.getElementById("theme-toggle");
+  if (!toggleBtn) return;
+  const isLight = theme === "light";
+  toggleBtn.setAttribute(
+    "aria-label",
+    isLight ? "Switch to dark mode" : "Switch to light mode"
+  );
+  toggleBtn.setAttribute(
+    "title",
+    isLight ? "Switch to dark mode" : "Switch to light mode"
+  );
+}
+
+function initTheme() {
+  const saved = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const initial = saved || (prefersDark ? "dark" : "light");
+  setTheme(initial);
+
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (e) => {
+      if (!localStorage.getItem("theme")) {
+        setTheme(e.matches ? "dark" : "light");
+      }
+    });
+}
+
 /* ── REUSABLE NAVBAR COMPONENT ── */
 const NAVBAR_TEMPLATE = `
 <div class="nav-wrap">
   <nav>
-    <a href="index.html" class="nav-item-icon" style="padding: 0 12px; display: flex; align-items: center; border-right: 1px solid rgba(255,255,255,0.1);">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width: 20px; height: 20px;">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-      </svg>
-    </a>
-
     <a class="nav-item" href="index.html">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
         <path d="M2 6L8 2l6 4v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z" />
@@ -46,44 +106,27 @@ const NAVBAR_TEMPLATE = `
         <path d="M3 6l5 3 5-3" />
       </svg><span>Contact</span>
     </a>
+
+    <div class="nav-divider"></div>
+
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+      <svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2"></path>
+        <path d="M12 20v2"></path>
+        <path d="m4.93 4.93 1.41 1.41"></path>
+        <path d="m17.66 17.66 1.41 1.41"></path>
+        <path d="M2 12h2"></path>
+        <path d="M20 12h2"></path>
+        <path d="m6.34 17.66-1.41 1.41"></path>
+        <path d="m19.07 4.93-1.41 1.41"></path>
+      </svg>
+      <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+      </svg>
+    </button>
   </nav>
 </div>
-`;
-
-/* ── REUSABLE FOOTER COMPONENT ── */
-const FOOTER_TEMPLATE = `
-<footer>
-  <div class="container footer-content">
-    <div class="footer-brand">
-      <div class="footer-logo">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width: 24px; height: 24px;">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-        </svg>
-        <span>Sundar.</span>
-      </div>
-      <p>Building the future of intelligent systems.</p>
-    </div>
-    
-    <div class="footer-links">
-      <div class="footer-col">
-        <h4>Navigation</h4>
-        <a href="index.html">Home</a>
-        <a href="work.html">Work</a>
-        <a href="about.html">About</a>
-        <a href="contact.html">Contact</a>
-      </div>
-      <div class="footer-col">
-        <h4>Socials</h4>
-        <a href="#" target="_blank">LinkedIn</a>
-        <a href="#" target="_blank">GitHub</a>
-        <a href="#" target="_blank">Twitter</a>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>&copy; ${new Date().getFullYear()} Sundaramoorthy. All rights reserved.</p>
-  </div>
-</footer>
 `;
 
 function initNavbar() {
@@ -91,12 +134,32 @@ function initNavbar() {
   if (!target) return;
   target.innerHTML = NAVBAR_TEMPLATE;
   autoActivateNav();
+  const toggleBtn = document.getElementById("theme-toggle");
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", toggleTheme);
+    updateThemeToggle(getActiveTheme());
+  }
 }
 
 function initFooter() {
   const target = document.getElementById("footer-target");
-  if (!target) return;
-  target.innerHTML = FOOTER_TEMPLATE;
+  if (target) target.remove();
+}
+
+
+function syncSocialLinks() {
+  const map = {
+    "social-instagram": SOCIAL_LINKS.instagram,
+    "social-facebook": SOCIAL_LINKS.facebook,
+    "social-x": SOCIAL_LINKS.x,
+    "social-linkedin": SOCIAL_LINKS.linkedin,
+    "social-github": SOCIAL_LINKS.github,
+    "social-leetcode": SOCIAL_LINKS.leetcode,
+  };
+  for (const [id, url] of Object.entries(map)) {
+    const el = document.getElementById(id);
+    if (el && url) el.href = url;
+  }
 }
 
 function autoActivateNav() {
@@ -167,7 +230,13 @@ function initScrollAnimations() {
   }, observerOptions);
 
   document.querySelectorAll(".fade-up:not(.visible)").forEach((el) => {
-    observer.observe(el);
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      el.classList.add("visible");
+      if (el.id === "stats") startCounters();
+    } else {
+      observer.observe(el);
+    }
   });
 }
 
@@ -270,6 +339,24 @@ function renderProjects(projects) {
     return;
   }
 
+  const categoryMap = {
+    ML: "Machine Learning",
+    DL: "Deep Learning",
+    Web: "Web Development",
+    "Full Stack": "Full Stack",
+    "Web Design": "Web Design",
+  };
+
+  const objectPositionMap = {
+    "Electricity Consumption Predictor": "center 75%",
+    "GoalForge – Discipline Builder": "center 35%",
+    "SpendSmart – Expense Tracker": "center 25%",
+    "Face Recognition Attendance System": "center center",
+    "XO Game – Tic Tac Toe": "center center",
+    "Video Frame Extractor Web App": "center top",
+    "Web Templates": "center top",
+  };
+
   container.innerHTML = projects
     .map((p, index) => {
       let imgSrc = p.image || "";
@@ -277,59 +364,68 @@ function renderProjects(projects) {
         imgSrc = imgSrc.replace(/^\/+/, "");
       }
 
+      const displayCategory =
+        categoryMap[p.category] ||
+        p.category ||
+        (p.tags && p.tags[0]) ||
+        "Project";
+
+      const projectUrl =
+        p.link && p.link !== "#" ? p.link : p.github_link || "#";
+
+      const objPos =
+        p.object_position || objectPositionMap[p.title] || "center top";
+
       return `
-      <div class="glass-card fade-up project-card-tilt" style="transition-delay: ${
-        index * 100
-      }ms">
-        <div class="project-img-container">
-          <img class="project-img" src="${imgSrc}" alt="${
+      <div class="project-card project-card-tilt fade-up" data-url="${projectUrl}" style="transition-delay: ${
+        index * 60
+      }ms" role="region" aria-label="${p.title}">
+        <img class="project-card-img" src="${imgSrc}" alt="${
         p.title
-      }" loading="lazy" decoding="async"
-               onerror="this.style.display='none'">
+      }" style="object-position: ${objPos};" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        
+        <div class="project-card-gradient"></div>
+
+        <div class="project-card-top-left">
+          <h3 class="project-card-title">${p.title}</h3>
+          <span class="project-card-category">${displayCategory}</span>
         </div>
 
-        <div class="project-info">
-          <div class="project-category-tag">${p.category || "Project"}</div>
-          <h3>${p.title}</h3>
+        <a href="${projectUrl}" target="_blank" rel="noopener noreferrer" class="project-card-arrow-btn" aria-label="Open ${
+        p.title
+      } project" title="Open Project">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="project-card-arrow-icon">
+            <line x1="7" y1="17" x2="17" y2="7"></line>
+            <polyline points="7 7 17 7 17 17"></polyline>
+          </svg>
+        </a>
 
-          <div class="badges">
-            ${(p.tags || [])
-              .map((tag) => `<span class="badge">${tag}</span>`)
-              .join("")}
-          </div>
-
-          <p>${p.description}</p>
-
-          <div class="card-actions">
-            <a href="${
-              p.link || "#"
-            }" target="_blank" class="btn btn-primary" style="padding: 10px 20px; font-size: 13px;">
-              <i data-lucide="external-link" style="width: 16px; height: 16px;"></i>
-              <span>Live Demo</span>
-            </a>
-            <a href="${
-              p.github_link || "#"
-            }" target="_blank" class="btn btn-secondary" style="padding: 10px 20px; font-size: 13px;">
-              <i data-lucide="github" style="width: 16px; height: 16px;"></i>
-              <span>Source</span>
-            </a>
-          </div>
+        <div class="project-card-bottom">
+          <a href="${projectUrl}" target="_blank" rel="noopener noreferrer" class="project-card-action-btn">
+            <span>View Project</span>
+            <span class="project-card-btn-arrow">→</span>
+          </a>
         </div>
       </div>
     `;
     })
     .join("");
 
-  // Re-init Lucide Icons
-  if (window.lucide) {
-    lucide.createIcons();
-  }
+  // Allow clicking on card background to navigate, while letting buttons work natively
+  container.querySelectorAll(".project-card").forEach((card) => {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest("a")) return;
+      const url = card.getAttribute("data-url");
+      if (url && url !== "#") {
+        window.open(url, "_blank", "noopener,noreferrer");
+      }
+    });
+  });
 
-  // Init Tilt Effect
+  // Re-init Tilt Effect
   initTilt();
 
-  // BUG 3 FIX: Create a fresh IntersectionObserver for newly rendered cards
-  // instead of calling initScrollAnimations() which skips already-observed elements.
+  // Create a fresh IntersectionObserver for newly rendered cards
   const obs = new IntersectionObserver(
     (entries, observer) => {
       entries.forEach((entry) => {
@@ -344,8 +440,16 @@ function renderProjects(projects) {
 
   container
     .querySelectorAll(".fade-up:not(.visible)")
-    .forEach((el) => obs.observe(el));
+    .forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        el.classList.add("visible");
+      } else {
+        obs.observe(el);
+      }
+    });
 }
+
 
 function initFilters() {
   const filterContainer = document.getElementById("filter-container");
@@ -384,9 +488,11 @@ function initFilters() {
 }
 
 /* ── DOM READY ── */
-document.addEventListener("DOMContentLoaded", () => {
+function onDOMReady() {
+  initTheme();
   initNavbar();
   initFooter();
+  syncSocialLinks();
   typeEffect();
   initScrollAnimations();
   initContactForm();
@@ -401,261 +507,217 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // BUG 4 FIX: Canvas init moved inside DOMContentLoaded so the <canvas id="bg">
   // element is guaranteed to exist before we query it.
+  // ── DYNAMIC NEURAL-NETWORK CANVAS BACKGROUND ──
   if (ENABLE_CANVAS_ANIMATION) {
     const canvas = document.getElementById("bg");
     if (canvas) {
       const ctx = canvas.getContext("2d");
 
+      function parseHex(colorStr, fallback = { r: 255, g: 255, b: 255 }) {
+        if (!colorStr) return fallback;
+        const str = colorStr.toString().trim();
+        if (str.startsWith("#")) {
+          let hex = str.slice(1);
+          if (hex.length === 3) {
+            hex = hex.split("").map((c) => c + c).join("");
+          }
+          const num = parseInt(hex, 16);
+          if (!isNaN(num) && hex.length === 6) {
+            return {
+              r: (num >> 16) & 255,
+              g: (num >> 8) & 255,
+              b: num & 255,
+            };
+          }
+        }
+        return fallback;
+      }
+
+      let nodes = [];
+
+      function getEffectiveNodeCount() {
+        const count = neuralConfig.nodeCount || 70;
+        return window.innerWidth < 768
+          ? Math.max(28, Math.round(count * 0.55))
+          : count;
+      }
+
+      function createNode(w, h) {
+        const speed = neuralConfig.animationSpeed || 0.15;
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = speed * (0.7 + Math.random() * 0.6);
+        return {
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: Math.cos(angle) * velocity,
+          vy: Math.sin(angle) * velocity,
+          radius: 1.2 + Math.random() * 1.1,
+          pulseOffset: Math.random() * Math.PI * 2,
+          pulseSpeed: 0.015 + Math.random() * 0.02,
+        };
+      }
+
+      function initNodes() {
+        const targetCount = getEffectiveNodeCount();
+        nodes = [];
+        for (let i = 0; i < targetCount; i++) {
+          nodes.push(createNode(canvas.width, canvas.height));
+        }
+      }
+
       function resize() {
+        const prevW = canvas.width || window.innerWidth;
+        const prevH = canvas.height || window.innerHeight;
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+
+        if (nodes.length === 0) {
+          initNodes();
+        } else {
+          const scaleX = canvas.width / (prevW || 1);
+          const scaleY = canvas.height / (prevH || 1);
+          nodes.forEach((n) => {
+            n.x = Math.max(0, Math.min(canvas.width, n.x * scaleX));
+            n.y = Math.max(0, Math.min(canvas.height, n.y * scaleY));
+          });
+          const targetCount = getEffectiveNodeCount();
+          while (nodes.length < targetCount) {
+            nodes.push(createNode(canvas.width, canvas.height));
+          }
+          if (nodes.length > targetCount) {
+            nodes = nodes.slice(0, targetCount);
+          }
+        }
       }
+
       resize();
       window.addEventListener("resize", resize);
 
-      const W = () => canvas.width;
-      const H = () => canvas.height;
-      function rand(a, b) {
-        return Math.random() * (b - a) + a;
-      }
-
-      class Puff {
-        constructor() {
-          this.init();
-          this.age = rand(0, 3000);
-        }
-        init() {
-          this.x = rand(-0.1, 1.1);
-          this.y = rand(-0.1, 1.1);
-          this.rx = rand(0.1, 0.28);
-          this.ry = rand(0.06, 0.16);
-          this.baseOpacity = rand(0.06, 0.18);
-          this.vx = rand(-0.00004, 0.00004);
-          this.vy = rand(-0.00002, 0.00002);
-          this.rotation = rand(0, Math.PI * 2);
-          this.rotSpeed = rand(-0.00015, 0.00015);
-          this.hue = 0;
-          this.lightness = rand(20, 40);
-          this.pulseSpeed = rand(0.0015, 0.005);
-          this.pulseOffset = rand(0, Math.PI * 2);
-          this.fadeSpeed = rand(0.0008, 0.002);
-          this.fadeOffset = rand(0, Math.PI * 2);
-          this.morphSpeed = rand(0.0006, 0.0018);
-          this.morphOffset = rand(0, Math.PI * 2);
-        }
-        update(t) {
-          this.age++;
-          this.x += this.vx;
-          this.y += this.vy;
-          this.rotation += this.rotSpeed;
-          const morph =
-            0.85 + 0.15 * Math.sin(t * this.morphSpeed + this.morphOffset);
-          this._curRx = this.rx * morph;
-          this._curRy = this.ry * (1 / morph);
-          const fade =
-            0.5 + 0.5 * Math.sin(t * this.fadeSpeed + this.fadeOffset);
-          const pulse =
-            0.7 + 0.3 * Math.sin(t * this.pulseSpeed + this.pulseOffset);
-          this._opacity = this.baseOpacity * fade * pulse;
-          if (
-            this.x < -0.35 ||
-            this.x > 1.35 ||
-            this.y < -0.35 ||
-            this.y > 1.35
-          )
-            this.init();
-        }
-        draw() {
-          const cx = this.x * W(),
-            cy = this.y * H();
-          const rx = this._curRx * W(),
-            ry = this._curRy * H();
-          ctx.save();
-          ctx.translate(cx, cy);
-          ctx.rotate(this.rotation);
-          const g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
-          const op = this._opacity;
-          g.addColorStop(0, `hsla(0,0%,${this.lightness}%,${op})`);
-          g.addColorStop(
-            0.35,
-            `hsla(0,0%,${this.lightness - 4}%,${op * 0.65})`
-          );
-          g.addColorStop(0.7, `hsla(0,0%,${this.lightness - 8}%,${op * 0.25})`);
-          g.addColorStop(1, `hsla(0,0%,${this.lightness - 12}%,0)`);
-          ctx.scale(1, ry / rx);
-          ctx.beginPath();
-          ctx.arc(0, 0, rx, 0, Math.PI * 2);
-          ctx.fillStyle = g;
-          ctx.fill();
-          ctx.restore();
-        }
-      }
-
-      const puffs = Array.from({ length: 28 }, () => new Puff());
-
-      const stars = Array.from({ length: 200 }, () => {
-        const roll = Math.random();
-        let baseR =
-          roll < 0.7
-            ? rand(0.25, 0.8)
-            : roll < 0.9
-            ? rand(0.9, 1.7)
-            : roll < 0.97
-            ? rand(1.8, 3.0)
-            : rand(3.2, 4.8);
-        const isBig = baseR > 1.8;
-        return {
-          x: Math.random(),
-          y: Math.random(),
-          r: baseR,
-          baseR,
-          op: isBig ? rand(0.55, 0.95) : rand(0.15, 0.8),
-          twinkleSpeed: rand(0.003, isBig ? 0.01 : 0.02),
-          twinkleOffset: rand(0, Math.PI * 2),
-          hue: 0,
-          isBig,
-          shrinkRate: rand(0.00008, 0.00018),
-          minScale: 0.02,
-          age: rand(0, 600),
-        };
-      });
-
-      function drawStars(t) {
-        stars.forEach((s) => {
-          s.age++;
-          const scale = Math.max(s.minScale, 1 - s.shrinkRate * s.age);
-          s.r = s.baseR * scale;
-          if (scale <= s.minScale) s.age = 0;
-          const twinkle =
-            0.5 + 0.5 * Math.sin(t * s.twinkleSpeed + s.twinkleOffset);
-          const alpha = s.op * (s.isBig ? 0.55 + 0.45 * twinkle : twinkle);
-          ctx.save();
-          ctx.globalAlpha = alpha;
-          if (s.isBig) {
-            const glow = ctx.createRadialGradient(
-              s.x * W(),
-              s.y * H(),
-              0,
-              s.x * W(),
-              s.y * H(),
-              s.r * 5.5
-            );
-            glow.addColorStop(0, `hsla(0,0%,90%,0.32)`);
-            glow.addColorStop(1, "rgba(0,0,0,0)");
-            ctx.fillStyle = glow;
-            ctx.beginPath();
-            ctx.arc(s.x * W(), s.y * H(), s.r * 5.5, 0, Math.PI * 2);
-            ctx.fill();
-          }
-          ctx.fillStyle = `hsla(0, 0%, 100%, 0.8)`;
-          ctx.beginPath();
-          ctx.arc(s.x * W(), s.y * H(), Math.max(0.15, s.r), 0, Math.PI * 2);
-          ctx.fill();
-          ctx.restore();
-        });
-      }
-
-      function drawBase(t) {
-        const w = W(),
-          h = H();
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(0, 0, w, h);
-        const shift = Math.sin(t * 0.0003) * 0.06;
-        const g1 = ctx.createRadialGradient(
-          w * (0.32 + shift),
-          h * 0.5,
-          0,
-          w * (0.32 + shift),
-          h * 0.5,
-          w * 0.65
-        );
-        g1.addColorStop(0, "rgba(255,255,255,0.03)");
-        g1.addColorStop(0.5, "rgba(255,255,255,0.01)");
-        g1.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = g1;
-        ctx.fillRect(0, 0, w, h);
-        const g2 = ctx.createRadialGradient(
-          w * (0.78 - shift),
-          h * 0.4,
-          0,
-          w * (0.78 - shift),
-          h * 0.4,
-          w * 0.48
-        );
-        g2.addColorStop(0, "rgba(255,255,255,0.02)");
-        g2.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = g2;
-        ctx.fillRect(0, 0, w, h);
-        const breathe = 0.08 + 0.06 * Math.sin(t * 0.0008);
-        const g3 = ctx.createRadialGradient(
-          w * 0.44,
-          h * 0.44,
-          0,
-          w * 0.44,
-          h * 0.44,
-          w * (0.22 + breathe)
-        );
-        g3.addColorStop(0, "rgba(255,255,255,0.04)");
-        g3.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = g3;
-        ctx.fillRect(0, 0, w, h);
-        const g4 = ctx.createRadialGradient(
-          w * 0.62,
-          h * 0.6,
-          0,
-          w * 0.62,
-          h * 0.6,
-          w * 0.35
-        );
-        g4.addColorStop(
-          0,
-          `rgba(255,255,255,${0.02 + 0.01 * Math.sin(t * 0.0005)})`
-        );
-        g4.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = g4;
-        ctx.fillRect(0, 0, w, h);
-      }
-
-      let mouseX = 0.5,
-        mouseY = 0.5,
-        smoothMX = 0.5,
-        smoothMY = 0.5;
-      window.addEventListener("mousemove", (e) => {
-        mouseX = e.clientX / window.innerWidth;
-        mouseY = e.clientY / window.innerHeight;
-      });
-
-      function drawMouseGlow() {
-        smoothMX += (mouseX - smoothMX) * 0.04;
-        smoothMY += (mouseY - smoothMY) * 0.04;
-        const w = W(),
-          h = H(),
-          cx = smoothMX * w,
-          cy = smoothMY * h;
-        const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, w * 0.3);
-        g.addColorStop(0, "rgba(255,255,255,0.03)");
-        g.addColorStop(0.5, "rgba(255,255,255,0.01)");
-        g.addColorStop(1, "rgba(0,0,0,0)");
-        ctx.fillStyle = g;
-        ctx.fillRect(0, 0, w, h);
-      }
-
       let t = 0;
-      function loop() {
+      let animId = null;
+
+      function render() {
         t++;
-        drawBase(t);
-        puffs.forEach((p) => {
-          p.update(t);
-          p.draw();
-        });
-        drawStars(t);
-        drawMouseGlow();
-        requestAnimationFrame(loop);
+        const isLight =
+          document.documentElement.getAttribute("data-theme") === "light";
+
+        // Dynamic theme-aware palette honoring neuralConfig
+        const currentBg = isLight ? "#F6F8FB" : neuralConfig.background || "#08090B";
+        const nodeColorHex = isLight ? "#0F172A" : neuralConfig.nodeColor || "#FFFFFF";
+        const lineColorHex = isLight ? "#0284C7" : neuralConfig.lineColor || "#7DD3FC";
+        const glowColorHex = isLight ? "#38BDF8" : neuralConfig.glowColor || "#60A5FA";
+
+        const nodeRgb = parseHex(nodeColorHex, { r: 255, g: 255, b: 255 });
+        const lineRgb = parseHex(lineColorHex, { r: 125, g: 211, b: 252 });
+        const glowRgb = parseHex(glowColorHex, { r: 96, g: 165, b: 250 });
+
+        // Clean background fill - no extra particles, galaxies, or heavy gradients
+        ctx.fillStyle = currentBg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const w = canvas.width;
+        const h = canvas.height;
+        const maxDist = neuralConfig.connectionDistance || 150;
+        const maxDistSq = maxDist * maxDist;
+        const baseOpacity =
+          neuralConfig.lineOpacity !== undefined ? neuralConfig.lineOpacity : 0.15;
+
+        // 1. UPDATE NODES (autonomous fixed slow velocity, bounce smoothly on edges)
+        for (let i = 0; i < nodes.length; i++) {
+          const n = nodes[i];
+
+          n.x += n.vx;
+          n.y += n.vy;
+
+          // Smooth boundary bounce
+          if (n.x <= 0) {
+            n.x = 0;
+            n.vx = Math.abs(n.vx);
+          } else if (n.x >= w) {
+            n.x = w;
+            n.vx = -Math.abs(n.vx);
+          }
+
+          if (n.y <= 0) {
+            n.y = 0;
+            n.vy = Math.abs(n.vy);
+          } else if (n.y >= h) {
+            n.y = h;
+            n.vy = -Math.abs(n.vy);
+          }
+        }
+
+        // 2. DRAW CONNECTING LINES (autonomous, based purely on distance between nodes)
+        ctx.lineWidth = 0.8;
+        for (let i = 0; i < nodes.length; i++) {
+          const a = nodes[i];
+          for (let j = i + 1; j < nodes.length; j++) {
+            const b = nodes[j];
+            const dx = a.x - b.x;
+            const dy = a.y - b.y;
+
+            if (Math.abs(dx) > maxDist || Math.abs(dy) > maxDist) continue;
+
+            const distSq = dx * dx + dy * dy;
+            if (distSq < maxDistSq) {
+              const dist = Math.sqrt(distSq);
+              const ratio = 1 - dist / maxDist;
+              const alpha = baseOpacity * ratio;
+
+              ctx.strokeStyle = `rgba(${lineRgb.r}, ${lineRgb.g}, ${lineRgb.b}, ${alpha.toFixed(3)})`;
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        // 3. DRAW GLOWING NODES (small glowing dots)
+        for (let i = 0; i < nodes.length; i++) {
+          const n = nodes[i];
+          const pulse =
+            0.85 + 0.15 * Math.sin(t * n.pulseSpeed + n.pulseOffset);
+
+          const glowAlpha = (0.22 * pulse).toFixed(3);
+          const coreAlpha = (0.92 * pulse).toFixed(3);
+
+          // Subtle outer halo glow
+          ctx.fillStyle = `rgba(${glowRgb.r}, ${glowRgb.g}, ${glowRgb.b}, ${glowAlpha})`;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.radius * 2.8, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Crisp core node dot
+          ctx.fillStyle = `rgba(${nodeRgb.r}, ${nodeRgb.g}, ${nodeRgb.b}, ${coreAlpha})`;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        animId = requestAnimationFrame(render);
       }
-      loop();
+
+      animId = requestAnimationFrame(render);
+
+      // Visibility change: pause rendering when tab is inactive to preserve CPU & battery
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          if (animId) cancelAnimationFrame(animId);
+        } else {
+          animId = requestAnimationFrame(render);
+        }
+      });
     }
   }
-});
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", onDOMReady);
+} else {
+  onDOMReady();
+}
+
 
 /* ── TILT EFFECT ── */
 function initTilt() {

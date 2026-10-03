@@ -4,8 +4,16 @@
     <meta charset="UTF-8" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="public/data/logo.png" type="image/png">
     <title>Sundaramoorthy | Contact</title>
+    <link rel="shortcut icon" href="data/Logo.png" type="image/png">
+    <script>
+      (function () {
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = savedTheme || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,27 +23,18 @@
     <link rel="stylesheet" href="style.css" />
     <script src="https://unpkg.com/lucide@latest" defer></script>
   </head>
-  <body>
+  <body class="contact-page" data-has-animated-bg="true">
     <canvas id="bg"></canvas>
 
-    <div class="page">
+    <div class="page contact-page-wrapper">
       <div id="navbar-target"></div>
 
-      <div class="container" style="padding-top: 120px; padding-bottom: 80px">
-        <section class="fade-up">
-          <div class="glass-card contact-form-wrap">
-            <h1
-              style="font-size: 36px; margin-bottom: 12px; text-align: center"
-            >
-              Get in Touch
-            </h1>
-            <p
-              style="
-                text-align: center;
-                color: var(--text-muted);
-                margin-bottom: 32px;
-              "
-            >
+      <main class="contact-main">
+        <div class="contact-layout">
+          <!-- LEFT SIDE: MESSAGE BOX -->
+          <div class="glass-card contact-form-wrap fade-up">
+            <h1 class="contact-title">Get in Touch</h1>
+            <p class="contact-subtitle">
               Let me know how I can help you build your next intelligent system.
             </p>
 
@@ -68,28 +67,59 @@
                   id="message"
                   name="message"
                   placeholder="Tell me about your project..."
+                  rows="3"
                   required
                 ></textarea>
               </div>
 
-              <button
-                type="submit"
-                class="btn btn-primary"
-                style="
-                  width: 100%;
-                  border-radius: 12px;
-                  padding: 16px;
-                  font-size: 16px;
-                "
-              >
+              <button type="submit" class="btn btn-primary contact-submit-btn">
                 Send Message
               </button>
             </form>
           </div>
-        </section>
-      </div>
-      <!-- Reusable Footer Target -->
-      <div id="footer-target"></div>
+
+          <!-- RIGHT SIDE: SOCIALS -->
+          <div class="contact-social-pane fade-up">
+            <h4 class="socials-heading">SOCIALS</h4>
+            <div class="social-icons-row">
+              <a href="https://www.instagram.com/sundar.matrix?stkn=MTJzMjQyZjgzZjB0ZA==" id="social-instagram" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="Instagram" title="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+              <a href="https://www.facebook.com/share/1GFmyZ4AmK/" id="social-facebook" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="Facebook" title="Facebook">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                </svg>
+              </a>
+              <a href="https://x.com/sundar_datasci" id="social-x" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="X" title="X">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="social-icon">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                </svg>
+              </a>
+              <a href="https://www.linkedin.com/in/sundaramoorthys23?utm_source=share_via&utm_content=profile&utm_medium=member_android" id="social-linkedin" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="LinkedIn" title="LinkedIn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+              </a>
+              <a href="https://github.com/Sundaramoorthy-G" id="social-github" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="GitHub" title="GitHub">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="social-icon">
+                  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                </svg>
+              </a>
+              <a href="https://leetcode.com/u/Sundar1207/" id="social-leetcode" target="_blank" rel="noopener noreferrer" class="social-icon-link" aria-label="LeetCode" title="LeetCode">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="social-icon">
+                  <path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.247 2.167 5.864 2.158 8.099-.02l4.743-4.636a1.375 1.375 0 0 0 0-1.956 1.375 1.375 0 0 0-1.956 0l-4.743 4.636a3.023 3.023 0 0 1-4.225.011l-4.28-4.195a3.197 3.197 0 0 1-.689-.987 3.25 3.25 0 0 1-.035-1.309 3.107 3.107 0 0 1 .687-1.189l3.853-4.125 5.406-5.787a1.375 1.375 0 0 0-1.026-2.316zm3.955 8.16a1.375 1.375 0 0 0-.961.438l-4.606 4.931a1.375 1.375 0 0 0 1.004 2.312h8.75a1.375 1.375 0 0 0 1.375-1.375 1.375 1.375 0 0 0-1.375-1.375h-6.195l3.012-3.226a1.375 1.375 0 0 0-1-2.705z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
 
     <script type="module" src="script.js" defer></script>
