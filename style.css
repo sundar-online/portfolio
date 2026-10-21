@@ -1647,3 +1647,79 @@ footer {
     padding: 60px 0 40px;
   }
 }
+
+/* ── 404 NOT FOUND PAGE ── */
+.error-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 80px;
+}
+
+.error-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  width: 100%;
+}
+
+.error-card {
+  max-width: 540px;
+  width: 100%;
+  padding: 60px 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.error-badge {
+  font-family: var(--font-heading);
+  font-size: clamp(72px, 12vw, 110px);
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 12px;
+  background: var(--stat-number-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 25px var(--accent-glow));
+}
+
+.error-title {
+  font-size: clamp(24px, 4vw, 32px);
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.error-subtitle {
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+  max-width: 420px;
+}
+
+.error-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .error-card {
+    padding: 40px 24px;
+  }
+  .error-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .error-actions .btn {
+    width: 100%;
+  }
+}
+

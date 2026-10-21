@@ -163,10 +163,14 @@ function syncSocialLinks() {
 }
 
 function autoActivateNav() {
-  const path = window.location.pathname;
-  const page = path.split("/").pop() || "index.html";
-  const navItems = document.querySelectorAll(".nav-item");
+  const path = window.location.pathname.replace(/\/+$/, "");
+  let page = path.split("/").pop() || "index.html";
+  if (!page.includes(".")) {
+    page = page + ".html";
+  }
+  if (page === ".html" || page === "") page = "index.html";
 
+  const navItems = document.querySelectorAll(".nav-item");
   navItems.forEach((item) => item.classList.remove("active"));
 
   navItems.forEach((item) => {
